@@ -8,7 +8,8 @@ ROBOT_NAME = 'talos'
 MAX_SURFACE = 0.3 # if a contact surface is greater than this value, the intersection is used instead of the whole surface
 LF = 0
 RF = 1  
-  
+
+# change the format into an array  
 def listToArray (seqs):
   nseq = []; nseqs= []
   for seq in seqs:
@@ -62,27 +63,21 @@ def getContactsIntersections(rbprmBuilder,i,q):
     intersections = rbprmBuilder.getContactSurfacesAtConfig(q, ROBOT_NAME + '_rleg_rom')
   return intersections
 
-# merge phases with the previous and the next phase
+# merge phases with the next phase
 def getMergedPhases (seqs):
   nseqs = []
   for i, seq in enumerate(seqs):
     nseq = []
-    if i == 0: nseq=seqs[i]+seqs[i+1]
-    elif i == len(seqs)-1: nseq=seqs[i-1]+seqs[i]
-    else: nseq=seqs[i-1]+seqs[i]+seqs[i+1]
+    if i == len(seqs)-1: nseq = seqs[i]
+    else: nseq = seqs[i]+seqs[i+1]
     nseq = removeDuplicates(nseq)
     nseqs.append(nseq)  
   return nseqs    
 
-
-def getSurfacesFromPathContinuous(rbprmBuilder, ps, afftool, pId, viewer = None, phaseStepSize = 1., useIntersection = False):
+"""
+def getSurfacesFromPathContinuous(rbprmBuilder, ps, surfaces_dict, pId, viewer = None, phaseStepSize = 1., useIntersection = False):
   pathLength = ps.pathLength(pId) # length of the path
   discretizationStepSize = 0.5 # step at which we check the colliding surfaces
-
-  # get surface information
-  all_surfaces = getAllSurfaces(afftool) 
-  all_names = afftool.getAffRefObstacles("Support") # id in names and surfaces match
-  surfaces_dict = dict(zip(all_names, all_surfaces)) # map surface names to surface points
     
   seqs = [] # list of list of surfaces : for each phase contain a list of surfaces. One phase is defined by moving of 'step' along the path
   t = 0.
@@ -136,7 +131,7 @@ def getSurfacesFromPathContinuous(rbprmBuilder, ps, afftool, pId, viewer = None,
         
   R = getRotationMatrixFromConfigs(configs)
   return R,seqs
-
+"""
 
 def getSurfacesFromPath(rbprmBuilder, configs, surfaces_dict, viewer = None, useIntersection = False, useMergePhase = False):
   seqs = [] 
