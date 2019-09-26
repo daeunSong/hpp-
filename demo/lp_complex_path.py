@@ -1,7 +1,7 @@
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
 from hpp.corbaserver.rbprm.talos_abstract import Robot
-Robot.urdfName += "_large"il
+Robot.urdfName += "_large"
 
 packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
