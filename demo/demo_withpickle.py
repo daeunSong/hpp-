@@ -1,5 +1,5 @@
 print "Plan guide trajectory ..."
-import lp_stairs_path as tp # change here to try different demo
+import lp_stairs_path as tp # still needs to be done for rbprmBuilder parameter ...
 print "Guide planned."
 
 from surfaces_from_path import *

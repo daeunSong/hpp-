@@ -75,7 +75,7 @@ def getMergedPhases (seqs):
   return nseqs    
   
 
-def getSurfacesFromGuideContinuous(rbprmBuilder, ps, surfaces_dict ,pId, viewer = None, step = 1., useIntersection= False):
+def getSurfacesFromGuideContinuous(rbprmBuilder, ps, surfaces_dict, pId, viewer = None, step = 1., useIntersection= False):
   pathLength = ps.pathLength(pId) #length of the path
   discretizationStep = 0.5 # step at which we check the colliding surfaces
   
@@ -102,7 +102,7 @@ def getSurfacesFromGuideContinuous(rbprmBuilder, ps, surfaces_dict ,pId, viewer 
       surface = surfaces_dict[name][0]
       if useIntersection and area(surface) > MAX_SURFACE : 
         if name in step_contacts : 
-          intersection = intersections[step_contacts.index(name)]
+          intersection = intersections[step_contacts.index(name)] # error
           phase_surfaces.append(intersection)
           if viewer:
             displaySurfaceFromPoints(viewer,intersection,[0,0,1,1])
@@ -142,9 +142,9 @@ def getSurfacesFromPath(rbprmBuilder, configs, surfaces_dict, viewer = None, use
       if useIntersection and area(intersection) > MAX_SURFACE : # append the intersection
         seq.append(intersection) 
       else:
-        if len(intersections) == len(phase_contacts_names): # in case getCollidingObstacleAtConfig does not work (because of the rom?)
-          seq.append(surfaces_dict[phase_contacts_names[j]][0]) # append the whole surface
-        else: seq.append(intersection) # append the intersection
+        #if len(intersections) == len(phase_contacts_names): # in case getCollidingObstacleAtConfig does not work (because of the rom?)
+        seq.append(surfaces_dict[phase_contacts_names[j]][0]) # append the whole surface
+        #else: seq.append(intersection) # append the intersection
       if viewer:
         displaySurfaceFromPoints(viewer,intersection,[0,0,1,1])
     seqs.append(seq)

@@ -72,7 +72,7 @@ ps.setParameter("Kinodynamic/accelerationBound",0.1)
 q_init = rbprmBuilder.getCurrentConfig ();
 q_init [0:3] =  [-0.3, 0.2, 0.98] ; v(q_init) # between rubble and stairs
 q_goal = q_init [::]
-q_goal [0:3] = [1.7, 0.2, 1.58]; v (q_goal) #top of stairs
+q_goal [0:3] = [1.7, 0.2, 1.53]; v (q_goal) #top of stairs
 q_goal[-6:-3] = [0,0,0]
 ps.setInitialConfig (q_init)
 q_init_0 = q_init[::]
