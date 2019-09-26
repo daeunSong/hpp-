@@ -73,15 +73,15 @@ def getMergedPhases (seqs):
     nseq = removeDuplicates(nseq)
     nseqs.append(nseq)  
   return nseqs    
+  
 
-"""
-def getSurfacesFromPathContinuous(rbprmBuilder, ps, surfaces_dict, pId, viewer = None, phaseStepSize = 1., useIntersection = False):
-  pathLength = ps.pathLength(pId) # length of the path
-  discretizationStepSize = 0.5 # step at which we check the colliding surfaces
-    
+def getSurfacesFromGuideContinuous(rbprmBuilder, ps, surfaces_dict ,pId, viewer = None, step = 1., useIntersection= False):
+  pathLength = ps.pathLength(pId) #length of the path
+  discretizationStep = 0.5 # step at which we check the colliding surfaces
+  
   seqs = [] # list of list of surfaces : for each phase contain a list of surfaces. One phase is defined by moving of 'step' along the path
   t = 0.
-  current_phase_end = phaseStepSize
+  current_phase_end = step
   end = False
   i = 0
   while not end: # for all the path
@@ -92,24 +92,23 @@ def getSurfacesFromPathContinuous(rbprmBuilder, ps, surfaces_dict, pId, viewer =
       for contact_name in step_contacts : 
         if not contact_name in phase_contacts_names:
           phase_contacts_names.append(contact_name)
-      t += discretizationStepSize
+      t += discretizationStep
     # end current phase
-        
     # get all the surfaces from the names and add it to seqs: 
     if useIntersection : 
       intersections = getContactsIntersections(rbprmBuilder,i,q)
-            
     phase_surfaces = []
     for name in phase_contacts_names:
-      surface = surfaces_dict[name][0] # [0] because the last vector contain the normal of the surface
+      surface = surfaces_dict[name][0]
       if useIntersection and area(surface) > MAX_SURFACE : 
         if name in step_contacts : 
           intersection = intersections[step_contacts.index(name)]
           phase_surfaces.append(intersection)
+          if viewer:
+            displaySurfaceFromPoints(viewer,intersection,[0,0,1,1])
       else :
         phase_surfaces.append(surface) 
-
-    phase_surfaces = sorted(phase_surfaces) # why is this step required ? without out the lp can fail
+    phase_surfaces = sorted(phase_surfaces) 
     seqs.append(phase_surfaces)
 
     # increase values for next phase
@@ -121,17 +120,16 @@ def getSurfacesFromPathContinuous(rbprmBuilder, ps, surfaces_dict, pId, viewer =
     if current_phase_end >= pathLength:
       current_phase_end = pathLength
   # end for all the guide path
-    
-  seqs = listToArray(seqs) # convert from list to array, we cannot do this before because sorted() require list
+  
+  seqs = listToArray(seqs) 
 
-  # get rotation matrix of the root at each discretization step
+  #get rotation matrix of the root at each discretization step
   configs = []
   for t in arange (0, pathLength, step) :
     configs.append(ps.configAtParam(pId, t)) 
-        
   R = getRotationMatrixFromConfigs(configs)
   return R,seqs
-"""
+
 
 def getSurfacesFromPath(rbprmBuilder, configs, surfaces_dict, viewer = None, useIntersection = False, useMergePhase = False):
   seqs = [] 
