@@ -1,16 +1,28 @@
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
 from hpp.corbaserver.rbprm.talos_abstract import Robot
+import pickle
 Robot.urdfName += "_large"
 
 packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
+pbName = 'stairs_bridge_2'
 
-import time
-time.sleep(1)
+f = open('data/pb_config/'+pbName+'.txt','r')
+line = f.readline().split()
+p_start = [float(v) for v in line]; p_start[2] += 1.00
+line = f.readline().split()
+p_goal = [float(v) for v in line]; p_goal[2] += 1.00
+line = f.readline().split()
+x_min = float(line[0]); x_max = float(line[1])
+line = f.readline().split()
+y_min = float(line[0]); y_max = float(line[1])
+line = f.readline().split()
+z_min = float(line[0]); z_max = float(line[1])
 
 rbprmBuilder = Robot ()
-rbprmBuilder.setJointBounds ("root_joint", [-3.2,1.8,0.19,0.21, 0.95,1.7])
+# rbprmBuilder.setJointBounds ("root_joint", [-3.2,1.8,0.19,0.21, 0.95,1.7])
+rbprmBuilder.setJointBounds ("root_joint", [x_min, x_max, y_min, y_max, z_min + 0.95, z_max + 1.0])
 # As this scenario only consider walking, we fix the DOF of the torso :
 rbprmBuilder.setJointBounds ('torso_1_joint', [0,0])
 rbprmBuilder.setJointBounds ('torso_2_joint', [0.,0.])
@@ -38,11 +50,10 @@ vf = ViewerFactory (ps)
 from hpp.corbaserver.affordance.affordance import AffordanceTool
 afftool = AffordanceTool ()
 afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
-afftool.loadObstacleModel (packageName, "multicontact/bauzil_ramp_simplified", "planning", vf)#,reduceSizes=[0.07,0.,0.])
+afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)#,reduceSizes=[0.07,0.,0.])
 v = vf.createViewer(displayArrows = True)
 afftool.visualiseAffordances('Support', v, [0.25, 0.5, 0.5])
 v.addLandmark(v.sceneName,1)
-
 
 
 ps.setParameter("Kinodynamic/velocityBound",vMax)
@@ -70,10 +81,12 @@ ps.selectPathPlanner("DynamicPlanner")
 ps.setParameter("Kinodynamic/velocityBound",0.3)
 ps.setParameter("Kinodynamic/accelerationBound",0.1)
 q_init = rbprmBuilder.getCurrentConfig ();
-q_init [0:3] =  [-0.3, 0.2,0.98] ; v(q_init) # between rubble and stairs
+q_init [0:3] = p_start 
+# q_init [3:7] = [ 0., 0., 1., 0.]; v (q_init)
 q_goal = q_init [::]
-q_goal [0:3] = [1.7, 0.2, 1.58]; v (q_goal) #top of stairs
-q_goal[-6:-3] = [0,0,0]
+q_goal [0:3] = p_goal #top of stairs
+q_goal[-6:-3] = [0,0,0]; v (q_goal)
+# q_goal [3:7] = [ 0., 0., 1., 0.]; v (q_goal)
 ps.setInitialConfig (q_init)
 q_init_0 = q_init[::]
 ps.addGoalConfig (q_goal)
@@ -86,12 +99,7 @@ print "done planning, optimize path ..."
 for i in range(5):
   ps.optimizePath(ps.numberPaths() -1)
 
-pId_stairs = ps.numberPaths() -1
-### END climb the stairs #####
-rbprmBuilder.setJointBounds ("root_joint", [-3.2,2.5,-0.8,0.3, 1.4,2.])
-ps.resetGoalConfigs()
-
-pathId = pId_stairs
+pathId = ps.numberPaths() -1
 
 
 print "done optimizing."
