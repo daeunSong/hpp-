@@ -93,47 +93,75 @@ def draw_scene(surfaces, ax = None):
         color_id = 0
     return ax    
 
+import pickle
+
+def readFromFile (fileName):
+  data = []
+  try:
+      with open(fileName,'rb') as f:
+        while True:
+          try:
+            line = pickle.load(f)
+          except EOFError:
+            break
+          data.append(line)  
+  except:
+      return None
+  return data[0]
   
 ############# main ###################    
 
 if __name__ == '__main__':
     
-  step_size = 1.0
-    
-  configs = getConfigsFromPath (tp.ps, tp.pathId, step_size)
-  all_surfaces = getAllSurfaces(tp.afftool) # only needed for plotting
-  surfaces_dict = getAllSurfacesDict(tp.afftool)   
-    
-  # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
-  
-  # draw(surfaces, all_surfaces) 
-  # draw(surfaces) # plot the result
-  
-  from sl1m.fix_sparsity import solveL1, solveMIP, solveL1_MIP
-  
-  R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
-  pb_MI = gen_pb(tp.q_init, R, surfaces)
-  # pb = gen_pb(tp.q_init, surfaces)
-  pb, res = solveMIP(pb_MI, surfaces, True, draw_scene)
-  print "MIP DONE"
-  
-  step_size = 1.3
-  R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
-  # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
-  pb = gen_pb(tp.q_init, R, surfaces)
-  # pb = gen_pb(tp.q_init, surfaces)
-  # pb, coms, footpos, allfeetpos, res = solveL1(pb, surfaces, draw_scene)
-  pb_, res = solveL1_MIP(pb, surfaces, draw_scene)
-  print "L1_MIP DONE"
-  
-  step_size = 1.3
-  R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
-  # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
-  pb = gen_pb(tp.q_init, R, surfaces)
-  # pb = gen_pb(tp.q_init, surfaces)
-  # pb, coms, footpos, allfeetpos, res = solveL1(pb, surfaces, draw_scene)
-  pb_, res = solveL1(pb, surfaces, draw_scene)
-  print "L1 DONE"
+    step_size = 1.15
 
-  
+    configs = getConfigsFromPath (tp.ps, tp.pathId, step_size)
+    all_surfaces = getAllSurfaces(tp.afftool) # only needed for plotting
+    surfaces_dict = getAllSurfacesDict(tp.afftool)   
+
+    # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+
+    # draw(surfaces, all_surfaces) 
+    # draw(surfaces) # plot the result
+
+    from sl1m.fix_sparsity import solveL1, solveMIP#, solveL1_MIP
+
+    R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
+    # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
+    pb_MI = gen_pb(tp.q_init, R, surfaces)
+    # pb = gen_pb(tp.q_init, surfaces)
+    pb, res, time_MI = solveMIP(pb_MI, surfaces, True, draw_scene)
+    
+    if type(pb) is int:
+        print "### MIP fail"
+    else:
+        print "### MIP successful"
+
+    # step_size = 1.0
+    R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, True)
+    # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+    pb_L1_i = gen_pb(tp.q_init, R, surfaces)
+    # pb = gen_pb(tp.q_init, surfaces)
+    # pb, coms, footpos, allfeetpos, res = solveL1(pb, surfaces, draw_scene)
+    pb, res, time_l1_int = solveL1(pb_L1_i, surfaces, draw_scene)
+    
+    if type(pb) is int:
+        print "### L1 with intersection fail"
+    else:
+        print "### L1 with intersection successful"
+
+    # step_size = 1.0
+    R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
+    # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
+    pb_L1 = gen_pb(tp.q_init, R, surfaces)
+    # pb = gen_pb(tp.q_init, surfaces)
+    # pb, coms, footpos, allfeetpos, res = solveL1(pb, surfaces, draw_scene)
+    pb, res, time_l1 = solveL1(pb_L1, surfaces, draw_scene)
+
+    if type(pb) is int:
+        print "### L1 fail"
+    else:
+        print "### L1 successful"
+
+    
 
