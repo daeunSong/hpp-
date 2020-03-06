@@ -13,7 +13,7 @@ from sl1m.tools.plot_plytopes import *
 from sl1m.planner_scenarios.talos.constraints import *
 
 
-def gen_pb(root_init, R, surfaces):
+def gen_pb(root_init, R, surfaces, slack_scale):
     
     # nphases = len(surfaces)
     # lf_0 = array(root_init[0:3]) + array([0, 0.085,-0.98]) # values for talos ! 
@@ -29,7 +29,7 @@ def gen_pb(root_init, R, surfaces):
     
     #TODO in non planar cases, K must be rotated
     #phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [copyKin(kinematicConstraints) for _ in range(len(surfaces[i]))], "relativeK" : [relativeConstraints[(i)%2] for _ in range(len(surfaces[i]))], "S" : surfaces[i] } for i in range(nphases)]
-    phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [genKinematicConstraints(left_foot_constraints,right_foot_constraints,index = i, rotation = R, min_height = 0.3) for _ in range(len(surfaces[i]))], "relativeK" : [genFootRelativeConstraints(right_foot_in_lf_frame_constraints,left_foot_in_rf_frame_constraints,index = i, rotation = R)[(i) % 2] for _ in range(len(surfaces[i]))], "rootOrientation" : R[i], "S" : surfaces[i] } for i in range(nphases)]
+    phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [genKinematicConstraints(left_foot_constraints,right_foot_constraints,index = i, rotation = R, min_height = 0.3) for _ in range(len(surfaces[i]))], "relativeK" : [genFootRelativeConstraints(right_foot_in_lf_frame_constraints,left_foot_in_rf_frame_constraints,index = i, rotation = R)[(i) % 2] for _ in range(len(surfaces[i]))], "rootOrientation" : R[i], "S" : surfaces[i], "slack_scale" : slack_scale } for i in range(nphases)]
     res ["phaseData"] = phaseData
     return res 
 
@@ -91,14 +91,15 @@ def readFromFile (fileName):
       return None
   return data[0]
   
+  
 ############# main ###################    
 
 if __name__ == '__main__':
     
-    fileName = "data/new/"+tp.pbName
-    fileName_ps = "data/new/"+tp.pbName+"_ps" #phase and stepsizes
+    fileName = "data/new/"+tp.pbName+"___"
+    fileName_ps = "data/new/"+tp.pbName+"_ps___" #phase and stepsizes
     
-    CONTINUOUS = True
+    CONTINUOUS = False
     if CONTINUOUS:
         fileName += "_c"
         fileName_ps += "_c"
@@ -119,59 +120,31 @@ if __name__ == '__main__':
         success_MI = success_l1_int = success_l1 = 0
         phase_l1_int = phase_l1 = 0
         step_size_l1_int = step_size_l1 = 0
-
+        
+        
     if data_ps != None:
         s = data_ps[0]
         s_i = data_ps[1]
         s_f = data_ps[2]
         s_if = data_ps[3]
-        p = data_ps[4]
-        p_i = data_ps[5]
-        p_f = data_ps[6]
-        p_if = data_ps[7]
+        sl = data_ps[4]
+        sl_i = data_ps[5]
+        sl_f = data_ps[6]
+        sl_if = data_ps[7]
     else:
         s = []
         s_i = []
         s_f = []
         s_if = []
-        p = []
-        p_i = []
-        p_f = [[],[]]
-        p_if = [[],[]]    
-        
-    # if data_ps != None:
-        # s = data_ps[0]
-        # s_i = data_ps[1]
-        # s_i_ = data_ps[2]
-        # s_f = data_ps[3]
-        # s_if = data_ps[4]
-        # s_if_ = data_ps[5]
-        # p = data_ps[6]
-        # p_i = data_ps[7]
-        # p_i_ = data_ps[8]
-        # p_f = data_ps[9]
-        # p_if = data_ps[10]
-        # p_if_ = data_ps[11]
-    # else:
-        # s = []
-        # s_i = []
-        # s_i_ = []
-        # s_f = []
-        # s_if = []
-        # s_if_ = []
-        # p = []
-        # p_i = []
-        # p_i_ = []
-        # p_f = [[],[]]
-        # p_if = [[],[]]
-        # p_if_ = [[],[]]
+        sl = []
+        sl_i = []
+        sl_f = [[],[]]
+        sl_if = [[],[]]
         
     
     run = 0
-    p_if_phase = p_if[0]; p_if_case = p_if[1]
-    p_f_phase = p_f[0]; p_f_case = p_f[1]
-    
-    # p_if_phase_ = p_if_[0]; p_if_case_ = p_if_[1]
+    sl_if_phase = sl_if[0]; sl_if_case = sl_if[1]
+    sl_f_phase = sl_f[0]; sl_f_case = sl_f[1]
         
     all_surfaces = getAllSurfaces(tp.afftool) # only needed for plotting
     surfaces_dict = getAllSurfacesDict(tp.afftool)   
@@ -184,19 +157,20 @@ if __name__ == '__main__':
         print "############### run : ", run+1
         
         # set the random step size
-        step_size = uniform(0.5,2.0)
-        print "stepsize: ", step_size
+        step_size = uniform(0.7,1.3)
+        slack_scale = float(randrange(700,1300,10))
+        print "step size: ", step_size
+        print "slack scale: ", slack_scale
         
         ### run MIP
         if CONTINUOUS:
-            R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
+            R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
             # draw_scene(surfaces)
         else:
             configs = getConfigsFromPath (tp.ps, tp.pathId, step_size) # need for non-continuous function
             R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
-            # R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
-        pb_MI = gen_pb(tp.q_init, R, surfaces)
-        pb, res, time_MI = solveMIP(pb_MI, surfaces, True, draw_scene, False)
+        pb_MI = gen_pb(tp.q_init, R, surfaces, slack_scale)
+        pb, coms, res = solveMIP(pb_MI, surfaces, True, draw_scene, False)
     
         if pb is not None : 
             print "### MIP successful"
@@ -211,19 +185,17 @@ if __name__ == '__main__':
         
         ### run SL1M with intersection
         if CONTINUOUS:
-            configs = getConfigsFromPath (tp.ps, tp.pathId, step_size) # need for non-continuous function
-            R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
-            # R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, True)
+            R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, True)
         else:
-            R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
-        pb = gen_pb(tp.q_init, R, surfaces); phase = len(pb["phaseData"])
-        pb_, res, time_l1_int = solveL1(pb, surfaces, draw_scene, False)
+            R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, True)
+        pb = gen_pb(tp.q_init, R, surfaces, slack_scale); phase = len(pb["phaseData"])
+        pb_, coms, res_ = solveL1(pb, surfaces, draw_scene, False)
     
         if type(pb_) is int : 
             print "### L1 with intersection fail"
             s_if += [step_size]            
-            p_if_phase += [phase]
-            p_if_case += [pb_]
+            sl_if_phase += [slack_scale]
+            sl_if_case += [pb_]
             # continue
         else : 
             print "### L1 with intersection successful"
@@ -231,31 +203,9 @@ if __name__ == '__main__':
             phase_l1_int += phase
             step_size_l1_int += step_size
             s_i += [step_size]
-            p_i += [phase]
+            sl_i += [slack_scale]
         # print "L1 with intersection DONE"
 
-        # ### run SL1M with intersection merged
-        # if CONTINUOUS:
-            # R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, True)
-        # else:
-            # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, True)
-        # pb = gen_pb(tp.q_init, R, surfaces); phase = len(pb["phaseData"])
-        # pb_, res, time_l1_int = solveL1(pb, surfaces, draw_scene, False)
-    
-        # if type(pb_) is int : 
-            # print "### L1 with intersection with merged fail"
-            # s_if_ += [step_size]            
-            # p_if_phase_ += [phase]
-            # p_if_case_ += [pb_]
-            # # continue
-        # else : 
-            # print "### L1 with intersection with merged successful"
-            # # success_l1_int += 1
-            # # phase_l1_int += phase
-            # # step_size_l1_int += step_size
-            # s_i_ += [step_size]
-            # p_i_ += [phase]
-        # # print "L1 with intersection DONE"
         
         ### run SL1M 
         if CONTINUOUS:
@@ -263,14 +213,14 @@ if __name__ == '__main__':
         else:
             # draw_scene(surfaces)p_f = [p_f_phase,p_f_case]
             R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
-        pb = gen_pb(tp.q_init, R, surfaces); phase = len(pb["phaseData"])
-        pb_, res, time_l1 = solveL1(pb, surfaces, draw_scene, False)
+        pb = gen_pb(tp.q_init, R, surfaces, slack_scale); phase = len(pb["phaseData"])
+        pb_, coms, res_ = solveL1(pb, surfaces, draw_scene, False)
         
         if type(pb_) is int : 
             print "### L1 fail"
             s_f += [step_size]
-            p_f_phase += [phase]
-            p_f_case += [pb_]
+            sl_f_phase += [slack_scale]
+            sl_f_case += [pb_]
             continue
         else : 
             print "### L1 successful"
@@ -278,16 +228,14 @@ if __name__ == '__main__':
             phase_l1 += phase
             step_size_l1 += step_size
             s += [step_size]
-            p += [phase]
+            sl += [slack_scale]
         # print "L1 DONE"
         
         
-    p_f = [p_f_phase, p_f_case]
-    p_if = [p_if_phase, p_if_case]
-    # p_if_ = [p_if_phase_, p_if_case_]
+    sl_f = [sl_f_phase, sl_f_case]
+    sl_if = [sl_if_phase, sl_if_case]
     data = [success_MI, success_l1_int, phase_l1_int, step_size_l1_int, success_l1, phase_l1, step_size_l1]
-    # data_ps = [s, s_i, s_i_, s_f, s_if, s_if_, p, p_i, p_i_, p_f, p_if, p_if_]
-    data_ps = [s, s_i, s_f, s_if, p, p_i, p_f, p_if]
+    data_ps = [s, s_i, s_f, s_if, sl, sl_i, sl_f, sl_if]
     
 
     with open(fileName,'wb') as f:
