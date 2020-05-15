@@ -6,13 +6,13 @@ Robot.urdfName += "_large"
 
 packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
-pbName = 'rubbles_4'
+pbName = 'stairs_1'
 
-f = open('data/pb_config/'+pbName+'.txt','r')
+f = open('data/pb_config/'+pbName+".txt",'r')
 line = f.readline().split()
-p_start = [float(v) for v in line]; p_start[2] += 1.00
+p_start = [float(v) for v in line]; p_start[2] += 0.98
 line = f.readline().split()
-p_goal = [float(v) for v in line]; p_goal[2] += 1.00
+p_goal = [float(v) for v in line]; p_goal[2] += 0.98
 line = f.readline().split()
 x_min = float(line[0]); x_max = float(line[1])
 line = f.readline().split()
@@ -55,6 +55,15 @@ v = vf.createViewer(displayArrows = True)
 afftool.visualiseAffordances('Support', v, [0.25, 0.5, 0.5])
 v.addLandmark(v.sceneName,1)
 
+######random goal
+#from sl1m.rbprm.surfaces_from_path import *
+#from random import *
+#import numpy as np
+#all_surfaces = getAllSurfaces(afftool)
+#a = np.array(all_surfaces[randrange(0,len(all_surfaces))][0])
+#p_goal = [uniform(a.min(axis=0)[0], a.max(axis=0)[0]), uniform(a.min(axis=0)[1], a.max(axis=0)[1]), uniform(a.min(axis=0)[2], a.max(axis=0)[2])]; p_goal[2] += 1.00
+##p_goal = list(a.mean(axis=0)); p_goal[2] += 1.00
+#############
 
 ps.setParameter("Kinodynamic/velocityBound",vMax)
 ps.setParameter("Kinodynamic/accelerationBound",aMax)

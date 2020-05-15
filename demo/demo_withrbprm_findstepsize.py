@@ -259,7 +259,7 @@ if __name__ == '__main__':
         
         ### run SL1M 
         if CONTINUOUS:
-            R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
+            R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
         else:
             # draw_scene(surfaces)p_f = [p_f_phase,p_f_case]
             R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)

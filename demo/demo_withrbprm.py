@@ -116,7 +116,7 @@ if __name__ == '__main__':
     # draw(surfaces, all_surfaces) 
     # draw(surfaces) # plot the result
 
-    from sl1m.fix_sparsity import solveL1, solveMIP#, solveL1_MIP
+    from sl1m.fix_sparsity import solveL1_gr, solveMIP_gr, solveMIP_gr2#, solveL1_MIP
 
     # R, surfaces = getSurfacesFromPathContinuous(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
     # # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
@@ -142,15 +142,24 @@ if __name__ == '__main__':
     # else:
         # print "### L1 with intersection successful"
 
-    # step_size = 1.0
-    R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
-    # R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, True)
+    step_size = 1.0
+    #R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
+    R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, True)
     pb = gen_pb(tp.q_init, R, surfaces)
+    pb, res, time_MI = solveMIP_gr(pb, surfaces, True, draw_scene, True)
     # pb = gen_pb(tp.q_init, surfaces)
     
     # pb = gen_pb(tp.q_init, surfaces)
     # pb, coms, footpos, allfeetpos, res = solveL1(pb, surfaces, draw_scene)
-    pb, res, time_l1 = solveL1(pb, surfaces, draw_scene)
+    #pb, res, time_l1 = solveL1(pb, surfaces, draw_scene)
+    
+    R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, True)
+    pb = gen_pb(tp.q_init, R, surfaces)
+    pb, res, time_MI = solveL1_gr(pb, surfaces, draw_scene, True)
+    
+    #R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)
+    #pb = gen_pb(tp.q_init, R, surfaces); phase = len(pb["phaseData"])
+    #pb, res, time_l1 = solveL1_gr(pb, surfaces, draw_scene, True)
     
 
     if type(pb) is int:
