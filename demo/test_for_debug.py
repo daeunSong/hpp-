@@ -148,7 +148,7 @@ DISCRETIZE_SIZE = 0.1
 EPSILON = 1.0
 NUM_STEP = 4
 
-from sl1m.fix_sparsity import solveL1_gr_cost, solveMIP_gr_cost, solveMIP, solveL1_gr, solveL1
+from sl1m.fix_sparsity import solveL1_gr_cost, solveMIP_gr_cost, solveMIP, solveL1_gr, solveL1, solveL1_gr_cost_, solveMIP_gr_cost_
 import sl1m.planner   as pl
 import sl1m.planner_l1   as pl1
 
@@ -160,38 +160,33 @@ g_p0 = configs[-1][0:3]; goal = footPosFromCOM(g_p0)
 
 R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, NUM_STEP, tp.v, False)
 
-#MIP = False
+#s_p0 = None; init = None
+pb = gen_pb(init, s_p0, goal, R, surfaces)
+pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True)
+#pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, True)
+coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
 
-#while getDist(s_p0,g_p0) > EPSILON :
-for i in range(1):
-    #s_p0 = None; init = None
-    pb = gen_pb(init, s_p0, goal, R, surfaces)
-    #pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True)
-    pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, True)
-    coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
+#s_p0 = None; init = None
+pb = gen_pb(init, s_p0, goal, R, surfaces)
+pb, res, time = solveL1_gr_cost_(pb, surfaces, draw_scene, True, allfeetpos[2])
+#pb, res, time = solveMIP_gr_cost_(pb, surfaces, True, draw_scene, True, allfeetpos[2])
     
-    #s_p0 = None; init = None
-    #pb = gen_pb(init, s_p0, goal, R, surfaces)
-    #pb, res, time = solveL1_gr(pb, surfaces, draw_scene, True)
-    #pb, res, time = solveMIP_gr_cost_(pb, surfaces, True, draw_scene, True, allfeetpos[2])
-    
-    # first try MIP 
-    #pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True)
-    #coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
-    
-    ## try SL1M with the first contact as an equality constraint
-    ##s_p0 = None; init = None
-    #pb = gen_pb(init, s_p0, goal, R, surfaces)
-    #pb, res, time = solveMIP_gr_cost_(pb, surfaces, True, draw_scene, True, allfeetpos[2])
-    #coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
 
-    #init = [footpos[NUM_STEP%2][-1],footpos[(NUM_STEP+1)%2][-1]]
-    #s_p0 = coms[-1]
-    #print s_p0, getDist(s_p0,g_p0)
-#pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True)
-#s_p0 = res[0:3]
+### plotting
+#ax = draw_scene(surfaces)
+#ax.grid(False)
+#allfeetpos = init
+#allfeetpos += [res[0:3],res[10:13],res[20:23],res[30:33]]
 
-#while res < EPSILON: # plan next N steps till it gets clost enough to the way point
-    #pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, True)
-    
+#lf = [allfeetpos[0], allfeetpos[2], allfeetpos[4]]
+#rf = [allfeetpos[1], allfeetpos[3], allfeetpos[5]]
+#pl1.plotPoints(ax, rf, color = "r")
+#pl1.plotPoints(ax, lf, color = "g")
+
+#px = [c[0] for c in allfeetpos]
+#py = [c[1] for c in allfeetpos]
+#pz = [c[2] for c in allfeetpos]
+#ax.plot(px, py, pz, color = "g")
+#ax.set_zlim(-0.2,1.2)
+
    
