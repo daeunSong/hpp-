@@ -161,24 +161,29 @@ g_p0 = configs[-1][0:3]; goal = footPosFromCOM(g_p0)
 R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, NUM_STEP, tp.v, False)
 
 MIP = False
+LINEAR = False
+REWEIGHTING = False
+i = 0
+weight = 1.
 
-while getDist(s_p0,g_p0) > EPSILON :
+while getDist(init[0],goal[0]) > EPSILON :
+    if i == 5:
+        break;
+    print i,"th iteration, weight:", weight
+    
     pb = gen_pb(init, s_p0, goal, R, surfaces)
 
     if MIP:
-        pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True)
+        pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True, LINEAR)
         coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
     else:
-        pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, True)
+        pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, True, weight, LINEAR)
         coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
+        
+    i += 1
 
-    init = [footpos[NUM_STEP%2][-1],footpos[(NUM_STEP+1)%2][-1]]
+    init = [allfeetpos[-2],allfeetpos[-1]]
     s_p0 = coms[-1]
-    print s_p0, getDist(s_p0,g_p0)
-#pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True)
-#s_p0 = res[0:3]
+    dist = getDist(s_p0,g_p0)
+    print s_p0, dist
 
-#while res < EPSILON: # plan next N steps till it gets clost enough to the way point
-    #pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, True)
-    
-   
