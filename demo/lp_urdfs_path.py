@@ -6,7 +6,7 @@ Robot.urdfName += "_large"
 
 packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
-pbName = 'stairs_1'
+pbName = 'stairs_3'
 
 f = open('data/pb_config/'+pbName+".txt",'r')
 line = f.readline().split()

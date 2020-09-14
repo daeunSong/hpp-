@@ -150,7 +150,6 @@ if __name__ == '__main__':
             print "### MIP fail"
             continue
         # print "MIP DONE"
-
         
         ### run SL1M 
         R, surfaces = getSurfacesFromPathContinuous_(tp.rbprmBuilder, tp.ps, surfaces_dict, tp.pathId, tp.v, step_size, False)

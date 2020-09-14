@@ -1,7 +1,6 @@
 print "Plan guide trajectory ..."
 import lp_urdfs_path as tp # change here to try different demo
 # import lp_complex_path as tp # change here to try different demo
-# import talos_flatGround_path as tp
 print "Guide planned."
 
 from sl1m.rbprm.surfaces_from_path import *
@@ -116,10 +115,10 @@ def readFromFile (fileName):
 
 if __name__ == '__main__':
     
-    fileName = "data/comptime/intersection/cpp/flat"#+tp.pbName
+    fileName = "data/pb/"+tp.pbName
     
     run = 0
-    step_size = 1.0
+    step_size = 1.2
         
     all_surfaces = getAllSurfaces(tp.afftool) # only needed for plotting
     surfaces_dict = getAllSurfacesDict(tp.afftool)   
@@ -127,26 +126,6 @@ if __name__ == '__main__':
     #phase_num = 0;         candidate_num = 0
     #total_mip_comp = 0;    total_sl1m_comp = 0
     cnt = 0
-    
-    data = readFromFile(fileName)
-    
-    if data != None:
-        phase_num = data[0]
-        candidate_num = data[1]
-        mip_comp_gr = data[2]
-        mip_wslack_comp_gr = data[3]
-        sl1m_comp_gr = data[4]
-        sl1m_i_comp_gr = data[5]
-        iterations = data[6]
-    else :    
-        phase_num = []
-        candidate_num = []
-        mip_comp_gr = []
-        sl1m_comp_gr = []
-        mip_wslack_comp_gr = []
-        sl1m_comp_gr = []
-        sl1m_i_comp_gr = []
-        iterations = []
 
 
     from sl1m.fix_sparsity import solveL1,solveL1_re,solveL1_cost,solveL1_cost_re,solveMIP,solveMIP_cost, solveMIP_fix
@@ -166,7 +145,7 @@ if __name__ == '__main__':
         
         ### run MIP GUROBI
         configs = getConfigsFromPath (tp.ps, tp.pathId, step_size) # need for non-continuous function
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
         # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
         # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
         # pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
@@ -184,7 +163,7 @@ if __name__ == '__main__':
         #### run MIP GUROBI wslack
         # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
         # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
         # pb = gen_pb(init, s_p0, R, surfaces)
         pb = gen_pb(None, None, R, surfaces)
         pb, res, time_MIP_wslack_gr = solveMIP_fix(pb, surfaces, True, draw_scene, PLOT, CPP, True)
@@ -200,7 +179,7 @@ if __name__ == '__main__':
         #### run SL1M GUROBI 
         # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
         # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
         pb = gen_pb(None, None, R, surfaces) 
         pb, res, time_l1_gr = solveL1(pb, surfaces, draw_scene, PLOT, CPP)
         print time_l1_gr
@@ -216,9 +195,9 @@ if __name__ == '__main__':
         # #### run SL1M with iterative reweighting GUROBI 
         # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
         # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
         pb = gen_pb(None, None, R, surfaces)
-        pb, res, time_L1_i_gr, iteration = solveL1_re(pb, surfaces, draw_scene, PLOT, CPP)
+        pb_, res, time_L1_i_gr, iteration = solveL1_re(pb, surfaces, draw_scene, PLOT, CPP)
         print time_L1_i_gr, iteration
         # pb, res, time_L1_i_gr, iteration = 0, 0, 0, 0
     
@@ -231,20 +210,8 @@ if __name__ == '__main__':
         
         run += 1
         
-        total_candidate = 0
-        for surfs in surfaces:
-            total_candidate += len(surfs)
-        
-        phase_num += [phase]
-        candidate_num += [float(total_candidate)/float(phase)]
-        
-        mip_comp_gr += [time_MI_gr]
-        mip_wslack_comp_gr += [time_MIP_wslack_gr]
-        sl1m_comp_gr += [time_l1_gr]    
-        sl1m_i_comp_gr += [time_L1_i_gr]    
-        iterations += [iteration]
             
-    data = [phase_num, candidate_num, mip_comp_gr, mip_wslack_comp_gr, sl1m_comp_gr, sl1m_i_comp_gr, iterations]
+    data = pb
     
 
     with open(fileName,'wb') as f:

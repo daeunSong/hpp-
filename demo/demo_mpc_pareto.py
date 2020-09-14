@@ -19,13 +19,12 @@ def footPosFromCOM(init_com):
 def gen_pb(init, s_p0, goal, R, surfaces):
     
     nphases = len(surfaces)
-    kinematicConstraints = genKinematicConstraints(left_foot_constraints, right_foot_constraints)
-    relativeConstraints = genFootRelativeConstraints(right_foot_in_lf_frame_constraints, left_foot_in_rf_frame_constraints)    
+    
     res = { "p0" : init, "c0" : s_p0, "goal" : goal, "nphases": nphases}
     #res = { "p0" : None, "c0" : None, "goal" : None, "nphases": nphases}
     
     #TODO in non planar cases, K must be rotated
-    # phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [copyKin(kinematicConstraints) for _ in range(len(surfaces[i]))], "relativeK" : [relativeConstraints[(i)%2] for _ in range(len(surfaces[i]))], "S" : surfaces[i] } for i in range(nphases)]
+    #phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [copyKin(kinematicConstraints) for _ in range(len(surfaces[i]))], "relativeK" : [relativeConstraints[(i)%2] for _ in range(len(surfaces[i]))], "S" : surfaces[i] } for i in range(nphases)]
     phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [genKinematicConstraints(left_foot_constraints,right_foot_constraints,index = i, rotation = R, min_height = 0.3) for _ in range(len(surfaces[i]))], "relativeK" : [genFootRelativeConstraints(right_foot_in_lf_frame_constraints,left_foot_in_rf_frame_constraints,index = i, rotation = R)[(i) % 2] for _ in range(len(surfaces[i]))], "rootOrientation" : R[i], "S" : surfaces[i] } for i in range(nphases)]
     res ["phaseData"] = phaseData
     return res 
@@ -97,114 +96,134 @@ def readFromFile (fileName):
   return data[0]
   
 
-fileName = "data/comptime/optimization/cpp/"+tp.pbName+"_MIP"
+##### get waypoints
+#step_size = 0.1
+#configs = getConfigsFromPath(tp.ps, tp.pathId, step_size)
 
-data = readFromFile(fileName)
-    
-if data != None:
-    comptime = data[0]
-    # iterations = data[1]
-else :    
-    comptime = []
-    # iterations = []
+#waypoints = tp.ps.getWaypoints(tp.pathId)[0]
+
+
+############################# just for plotting
+#configs_ = array(configs)[:,:3].T
+#waypoints_ = array(waypoints)[:,:3].T
+
+#configs_xs = configs_[0]
+#configs_ys = configs_[1]
+#configs_zs = configs_[2]
+
+#waypoints_xs = waypoints_[0]
+#waypoints_ys = waypoints_[1]
+#waypoints_zs = waypoints_[2]
+
+#fig = plt.figure()
+#ax = fig.add_subplot(111, projection="3d")
+
+#ax.plot(configs_xs, configs_ys, configs_zs, 'blue', linewidth=2.)
+#ax.plot(waypoints_xs, waypoints_ys, waypoints_zs, 'red')
+#ax.scatter(waypoints_xs, waypoints_ys, waypoints_zs, color='red')
+
+##ax.set_xlim([-1, 7])
+##ax.set_ylim([-4,4])
+##ax.set_zlim([-4,4])
+
+#plt.ion()
+#plt.show()
+#############################
 
 
 #### MPC-style
 def getDist (waypoint1, waypoint2):
-    return np.power(waypoint2[0] - waypoint1[0],2) + np.power(waypoint2[1] - waypoint1[1],2) + np.power(waypoint2[2] - waypoint1[2],2)
+    return np.sqrt(np.power(waypoint2[0] - waypoint1[0],2) + np.power(waypoint2[1] - waypoint1[1],2) + np.power(waypoint2[2] - waypoint1[2],2))
     
-def getSelectedSurfaces (res, surfaces, l = []):
-    for i in range(NUM_STEP):
-        for j in range(len(surfaces[0])):
-            index = i*(pl1.NUM_SLACK_PER_SURFACE*len(surfaces[0])+4) +4 + j*pl1.NUM_SLACK_PER_SURFACE
-            if (res[index] <= 0.01 and j not in l):
-                l.append(j)
-    return l
+###### TO DO 
+# add a way point when the orientation changes rapidly
+    
+###### TO DO 
+# get a rotation matrix/quat from the vector
+#def getRot
 
-step_size = 0.5
+surfaces_dict = getAllSurfacesDict(tp.afftool)  
+step_size = 1.0
 DISCRETIZE_SIZE = 0.1
 EPSILON = 1.0
 NUM_STEP = 4
 
-from sl1m.fix_sparsity import solveL1,solveL1_re,solveL1_cost,solveL1_cost_re,solveMIP,solveMIP_cost
+from sl1m.fix_sparsity import solveL1_gr_cost, solveMIP_gr_cost, solveMIP, solveL1_gr, solveL1
 import sl1m.planner   as pl
 import sl1m.planner_l1   as pl1
 
+
+goals = getConfigsFromPath (tp.ps, tp.pathId, step_size*4)
+configs = getConfigsFromPath (tp.ps, tp.pathId, step_size)
+configs_per_goals = []
+del goals[0]
+
+for i in range(len(goals)-1):
+    configs_ = configs[4*i:4*(i+1)]
+    configs_per_goals.append(configs_)
+
+surfaces_dict = getAllSurfacesDict(tp.afftool)
+all_surfaces = getAllSurfaces(tp.afftool)  
+
+s_p0 = configs[0][0:3]; init = footPosFromCOM(s_p0)
+
+####
 configs = getConfigsFromPath (tp.ps, tp.pathId, step_size)
 surfaces_dict = getAllSurfacesDict(tp.afftool)
 all_surfaces = getAllSurfaces(tp.afftool)   
-
 s_p0 = configs[0][0:3]; init = footPosFromCOM(s_p0)
-g_p0 = configs[-1][0:3]; goal = footPosFromCOM(g_p0)
+g_p0 = configs[-1][0:3]; g_p0[0]+=1.0; goal = footPosFromCOM(g_p0)
+
+
 R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, NUM_STEP, tp.v, False)
+    
 
-PLOT = False
-MIP = True
-LINEAR = False
-CPP = True
-WSLACK = True
+MIP = False
 i = 0
-dist = getDist(s_p0,g_p0)
-OPT = (len(surfaces[0])-1)*NUM_STEP
-weight = 0.01
-tot_time = 0.; tot_iter = 0.
-loop = 0
 
-while getDist(init[0],goal[0]) > EPSILON :
-    if i == 5:
-        break
-        
-    #weight = 10.*i/len(surfaces[0])
-    print i,"th iteration, weight:", weight
-    
-    pb = gen_pb(init, s_p0, goal, R, surfaces)
+#pb = gen_pb(init, s_p0, goal, R, surfaces)
+#pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, False, weight)
+#init = [res[20:23],res[30:33]]
+#s_p0 = res[30:33]; s_p0[2] +=0.98
 
-    if MIP:
-        pb, res, time = solveMIP_cost(pb, surfaces, True, draw_scene, PLOT, CPP, WSLACK, LINEAR)
-        print "time to solve MIP: ", time
-        coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
-    else:
-        pb, res, time= solveL1_cost(pb, surfaces, draw_scene, PLOT, CPP, weight, LINEAR)
-        # pb, res, time, iteration= solveL1_cost_re(pb, surfaces, draw_scene, PLOT, CPP, weight, LINEAR)
-        time_ = 0.
-        if type(res) == int:
-            weight = 0.
-            pb = gen_pb(init, s_p0, goal, R, surfaces)
-            pb, res, time_ = solveL1_cost(pb, surfaces, draw_scene, PLOT, CPP, weight, LINEAR)    
-            # pb, res, time_ , iteration= solveL1_cost_re(pb, surfaces, draw_scene, PLOT, CPP, weight, LINEAR)    
-            time += time_
-        print "time to solve LP: ", time+time_
-        coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
-        
-    i += 1
-    tot_time += time
-    # tot_iter += iteration
+#pb = gen_pb(init, s_p0, goal, R, surfaces)
+#pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, False, weight)
+#init = [res[20:23],res[30:33]]
+#s_p0 = res[30:33]; s_p0[2] +=0.98
 
-    init = [allfeetpos[-1-((NUM_STEP+1)%2)],allfeetpos[-1-((NUM_STEP)%2)]]
-    s_p0 = coms[-1]
-    dist = getDist(s_p0,g_p0)
-    
-    weight = 1000./(dist*OPT)
-    
-    if dist <= 5.0:
-        weight = 50.
-    
-    # print s_p0, dist
+####
 
-comptime += [tot_time]
-# iterations += [tot_iter]
-data = [comptime]#, iterations]
-print tot_time
+MIP = False
+i = 0
+weight = 100
 
-with open(fileName,'wb') as f:
-    pickle.dump(data,f)
 
-"""
-data = readFromFile("data/comptime/optimization/cpp/rubbles_2_MIP")
-comptime = data[0]
-# iterations = data[1]
+for j,goal in enumerate(goals) :
+    g_p0 = goal[0:3]; goal = footPosFromCOM(g_p0)
+    R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs_per_goals[j], surfaces_dict, NUM_STEP, tp.v, False)
+    weight = 0.001
 
-len(comptime)
-sum(comptime)/len(comptime)
-# sum(iterations)
-"""
+    while getDist(init[0],goal[0]) > EPSILON :
+        if i == 5:
+            break;
+
+    #while i < 1:
+        print i,"th iteration"
+        pb = gen_pb(init, s_p0, goal, R, surfaces)
+
+        if MIP:
+            pb, res, time = solveMIP_gr_cost(pb, surfaces, True, draw_scene, True)
+            coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
+        else:
+            pb, res, time = solveL1_gr_cost(pb, surfaces, draw_scene, True, weight)
+            coms, footpos, allfeetpos = pl1.retrieve_points_from_res(pb, res)
+            
+        #weight += 0.001
+        #weight += 10
+        i += 1
+
+        init = [allfeetpos[-2],allfeetpos[-1]]
+        s_p0 = coms[-1]
+        print s_p0, getDist(s_p0,g_p0)
+        ##i += 1
+

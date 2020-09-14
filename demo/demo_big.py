@@ -1,7 +1,6 @@
 print "Plan guide trajectory ..."
 import lp_urdfs_path as tp # change here to try different demo
 # import lp_complex_path as tp # change here to try different demo
-# import talos_flatGround_path as tp
 print "Guide planned."
 
 from sl1m.rbprm.surfaces_from_path import *
@@ -116,7 +115,7 @@ def readFromFile (fileName):
 
 if __name__ == '__main__':
     
-    fileName = "data/comptime/intersection/cpp/flat"#+tp.pbName
+    fileName = "data/comptime/tmp/cpp/complex"#tp.pbName
     
     run = 0
     step_size = 1.0
@@ -149,14 +148,14 @@ if __name__ == '__main__':
         iterations = []
 
 
-    from sl1m.fix_sparsity import solveL1,solveL1_re,solveL1_cost,solveL1_cost_re,solveMIP,solveMIP_cost, solveMIP_fix
+    from sl1m.fix_sparsity import solveL1,solveL1_re,solveL1_cost,solveL1_cost_re,solveMIP,solveMIP_cost,solveMIP_fix
     from random import *
 
     PLOT = True
     CPP = True
     fail = 0
     
-    while run < 1 and fail < 5 :   
+    while run < 1 and fail < 3 :   
                 
         print "############### run : ", run+1
 
@@ -166,12 +165,12 @@ if __name__ == '__main__':
         
         ### run MIP GUROBI
         configs = getConfigsFromPath (tp.ps, tp.pathId, step_size) # need for non-continuous function
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
-        # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
+        # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 10, tp.v, False)
         # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
         # pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
         pb = gen_pb(None, None, R, surfaces); phase = len(pb["phaseData"])
-        pb, res, time_MI_gr = solveMIP_fix(pb, surfaces, True, draw_scene, PLOT, CPP, False)
+        pb, res, time_MI_gr = solveMIP(pb, surfaces, True, draw_scene, PLOT, CPP, False)
         print time_MI_gr
         
         if type(pb) is int : 
@@ -182,12 +181,12 @@ if __name__ == '__main__':
             print "### MIP successful"
             
         #### run MIP GUROBI wslack
-        # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
+        # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 10, tp.v, False)
         # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
         # pb = gen_pb(init, s_p0, R, surfaces)
         pb = gen_pb(None, None, R, surfaces)
-        pb, res, time_MIP_wslack_gr = solveMIP_fix(pb, surfaces, True, draw_scene, PLOT, CPP, True)
+        pb, res, time_MIP_wslack_gr = solveMIP(pb, surfaces, True, draw_scene, PLOT, CPP, True)
         print time_MIP_wslack_gr
     
         if type(pb) is int : 
@@ -198,36 +197,32 @@ if __name__ == '__main__':
             print "### MIP WITH SLACK successful"
 
         #### run SL1M GUROBI 
-        # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
-        # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
-        pb = gen_pb(None, None, R, surfaces) 
-        pb, res, time_l1_gr = solveL1(pb, surfaces, draw_scene, PLOT, CPP)
-        print time_l1_gr
-        # pb, res, time_l1_gr = 0, 0, 0
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
+        # pb = gen_pb(init, s_p0, R, surfaces)
+        pb = gen_pb(None, None, R, surfaces)
+        pb, res, time_MIP_wslack_gr = solveMIP_fix(pb, surfaces, True, draw_scene, PLOT, CPP, False)
+        print time_MIP_wslack_gr
     
         if type(pb) is int : 
-            print "### SL1M fail"
+            print "### FIXED MIP fail"
             fail += 1
             continue
         else : 
-            print "### SL1M successful"
+            print "### MIP successful"
         
         # #### run SL1M with iterative reweighting GUROBI 
-        # R, surfaces = getSurfacesFromPath_mpc(tp.rbprmBuilder, configs, surfaces_dict, 15, tp.v, False)
-        # R[0]=[R[0][0]]; R[-1]=[R[-1][-1]]; surfaces[0]=[surfaces[0][0]]; surfaces[-1]=[surfaces[-1][-1]]
-        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, True, False)
+        R, surfaces = getSurfacesFromPath(tp.rbprmBuilder, configs, surfaces_dict, tp.v, False, False)
+        # pb = gen_pb(init, s_p0, R, surfaces)
         pb = gen_pb(None, None, R, surfaces)
-        pb, res, time_L1_i_gr, iteration = solveL1_re(pb, surfaces, draw_scene, PLOT, CPP)
-        print time_L1_i_gr, iteration
-        # pb, res, time_L1_i_gr, iteration = 0, 0, 0, 0
+        pb, res, time_MIP_wslack_gr = solveMIP_fix(pb, surfaces, True, draw_scene, PLOT, CPP, True)
+        print time_MIP_wslack_gr
     
         if type(pb) is int : 
-            print "### SL1M ITER fail"
+            print "### FIXED MIP WITH SLACK fail"
             fail += 1
             continue
         else : 
-            print "### SL1M ITER successful"
+            print "### FIXED MIP WITH SLACK successful"
         
         run += 1
         
@@ -235,20 +230,20 @@ if __name__ == '__main__':
         for surfs in surfaces:
             total_candidate += len(surfs)
         
-        phase_num += [phase]
-        candidate_num += [float(total_candidate)/float(phase)]
+        # phase_num += [phase]
+        # candidate_num += [float(total_candidate)/float(phase)]
         
-        mip_comp_gr += [time_MI_gr]
-        mip_wslack_comp_gr += [time_MIP_wslack_gr]
-        sl1m_comp_gr += [time_l1_gr]    
-        sl1m_i_comp_gr += [time_L1_i_gr]    
-        iterations += [iteration]
+    #     mip_comp_gr += [time_MI_gr]
+    #     mip_wslack_comp_gr += [time_MIP_wslack_gr]
+    #     sl1m_comp_gr += [time_l1_gr]    
+    #     sl1m_i_comp_gr += [time_L1_i_gr]    
+    #     iterations += [iteration]
             
-    data = [phase_num, candidate_num, mip_comp_gr, mip_wslack_comp_gr, sl1m_comp_gr, sl1m_i_comp_gr, iterations]
+    # data = [phase_num, candidate_num, mip_comp_gr, mip_wslack_comp_gr, sl1m_comp_gr, sl1m_i_comp_gr, iterations]
     
 
-    with open(fileName,'wb') as f:
-        pickle.dump(data,f)
+    # with open(fileName,'wb') as f:
+    #     pickle.dump(data,f)
         
 
 """
@@ -268,7 +263,7 @@ def readFromFile (fileName):
       return None
   return data[0]
 
-data = readFromFile("./stairs_3")
+data = readFromFile("data/comptime/tmp/cpp/complex")
 
 phase_num = data[0]
 candidate_num = data[1]
