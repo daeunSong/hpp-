@@ -4,7 +4,7 @@ import lp_urdfs_path as tp # change here to try different demo
 # import talos_flatGround_path as tp
 print "Guide planned."
 
-from sl1m.rbprm.surfaces_from_path import *
+from sl1m.rbprm.surfaces_from_planning import *
 from sl1m.constants_and_tools import *
 from sl1m.problem_definition import *
 
@@ -268,24 +268,38 @@ def readFromFile (fileName):
       return None
   return data[0]
 
-data = readFromFile("./stairs_3")
+pbNames = ['bridge_1','stairs','rubbles_1','rubbles_stairs_1','ground']
+suffix_names = ['_WO', '_Ww', '_Wi']
+
+pbName = pbNames[i]+suffix_names[j]
+data = readFromFile("./"+pbName)
 
 phase_num = data[0]
 candidate_num = data[1]
 mip_comp_gr = data[2]
-mip_wslack_comp_gr = data[3]
-sl1m_comp_gr = data[4]
-sl1m_i_comp_gr = data[5]
-iterations = data[6]
+sl1m_comp_gr = data[3]
+fail1 = data[4]
+fail2 = data[5]
+failcase = data[6]
+threshold = data[7]
 
 len(phase_num)
 sum(phase_num)/len(phase_num)
-sum(candidate_num)/len(phase_num)
-sum(mip_comp_gr)/len(phase_num)
-sum(mip_wslack_comp_gr)/len(phase_num)
-sum(sl1m_comp_gr)/len(phase_num)
-sum(sl1m_i_comp_gr)/len(phase_num)
-sum(iterations)
+candidate_num[1]
+sum(mip_comp_gr)/len(mip_comp_gr)
+sum(sl1m_comp_gr)/len(sl1m_comp_gr)
+fail1
+fail2
+%failcase
+threshold
+
+data = readFromFile("./"+pbName)
+phase_num = data[0]
+candidate_num = data[1]
+mip_comp_gr = data[2]
+fail = data[3]
+sum(mip_comp_gr)/len(mip_comp_gr)
+
 
 
 """
