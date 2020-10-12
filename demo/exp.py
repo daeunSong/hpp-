@@ -1,4 +1,5 @@
-from hpp.corbaserver.rbprm.talos_abstract import Robot
+# ~ from hpp.corbaserver.rbprm.talos_abstract import Robot
+from talos_rbprm.talos_abstract import Robot 
 from hpp.corbaserver.problem_solver import ProblemSolver
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
@@ -154,9 +155,11 @@ afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
 if pbName == 'ground':
     afftool.loadObstacleModel (packageName, "multicontact/ground", "planning", vf) # flat ground
 elif pbName == 'stairs' or pbName == 'debris':
-    afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])    
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.015,0.,0.])
 else:
-    afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf)
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
 
 #load the viewer
 v = vf.createViewer(displayArrows = True)
