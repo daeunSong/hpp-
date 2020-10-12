@@ -440,20 +440,20 @@ while run < MAX_RUN :
     #         #     with open("rubbles_stairs_res_cool",'wb') as f:
     #         #         pickle.dump(res_L1.res, f)
 
-    else:
-        from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
-        pb = res_L1.pb; allfeetpos = res_L1.res[2]
-        allfeetpos[0] = [init[1],init[0]]
-        del allfeetpos[1]
-        # pos = []
-        # for i in range(len(allfeetpos[0])):
-        #     pos += [[allfeetpos[0][i],allfeetpos[1][i]]]
-        del pb["phaseData"][0]; #del pos[0]; 
-        # allfeetpos = pos
-        from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
-        replace_surfaces_with_ineq_in_problem(pb)
-        cs = build_cs_from_sl1m_mip(pb,allfeetpos,rbprmBuilder,q_init)
-        cs.saveAsBinary("sl1m_data/bridge.cs")
+    # else:
+    #     from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
+    #     pb = res_L1.pb; allfeetpos = res_L1.res[2]
+    #     allfeetpos[0] = [init[1],init[0]]
+    #     del allfeetpos[1]
+    #     # pos = []
+    #     # for i in range(len(allfeetpos[0])):
+    #     #     pos += [[allfeetpos[0][i],allfeetpos[1][i]]]
+    #     del pb["phaseData"][0]; #del pos[0]; 
+    #     # allfeetpos = pos
+    #     from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
+    #     replace_surfaces_with_ineq_in_problem(pb)
+    #     cs = build_cs_from_sl1m_mip(pb,allfeetpos,rbprmBuilder,q_init)
+    #     cs.saveAsBinary("sl1m_data/bridge.cs")
     
     total_candidate = 0
     for surfs in surfaces:
