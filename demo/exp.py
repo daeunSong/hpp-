@@ -475,4 +475,24 @@ if SAVE:
     with open(fileName,'wb') as f:
         pickle.dump(data,f)
 
+from talos_rbprm.talos import Robot    as talosFull                                                                                              
+fb2 = talosFull()   
+allfeetpos = res_L1.res[2]
 
+z_offset=0.1
+
+q_init = fb2.referenceConfig.copy()
+# ~ q_init[:3] = p_start 
+q_end = q_init.copy()
+# ~ q_end [0:3] = p_goal 
+# ~ q_end[-6:-3] = [0,0,0.]
+
+q_init[:7] = ps.configAtParam(pathId, 0.001)[:7]
+q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
+q_end[2] += z_offset
+q_init[2] += z_offset
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
+cs = build_cs_from_sl1m_mip(res_L1.pb, allfeetpos, fb2, q_init, q_end,z_offset=z_offset / 2) 
+cs.saveAsBinary("talos_bridge.cs")   
+
+v(q_init)
