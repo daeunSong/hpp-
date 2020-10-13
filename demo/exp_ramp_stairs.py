@@ -1,7 +1,7 @@
-from hpp.corbaserver.rbprm.talos_abstract import Robot
-from hpp.corbaserver.problem_solver import ProblemSolver
+from talos_rbprm.talos_abstract import Robot
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
+from hpp.corbaserver import ProblemSolver
 import pickle
 Robot.urdfName += "_large"
 
@@ -15,7 +15,6 @@ TEST = True
 GUIDE = True
 CONTINUOUS = True
 INTERSECT = True
-THRESHOLD = 0.003
 COST=False
 
 #pbNames = ['bridge_1','stairs','debris','rubbles_1','rubbles_stairs_1','ground', 'playground']
@@ -34,7 +33,7 @@ if not GUIDE:
     #step_num = step_nums[I]
 else:
     if INTERSECT:
-        fileName += "_Wi" 
+        fileName += "_Wi"
     else: fileName += "_Ww"
     if CONTINUOUS:
         fileName += "_c"
@@ -78,9 +77,9 @@ rbprmBuilder.client.robot.setExtraConfigSpaceBounds(extraDofBounds)
 indexECS = rbprmBuilder.getConfigSize() - rbprmBuilder.client.robot.getDimensionExtraConfigSpace()
 
 
-# Creating an instance of HPP problem solver 
+# Creating an instance of HPP problem solver
 ps = ProblemSolver( rbprmBuilder )
-# define parameters used by various methods : 
+# define parameters used by various methods :
 ps.setParameter("Kinodynamic/velocityBound",vMax)
 ps.setParameter("Kinodynamic/accelerationBound",aMax)
 ps.setParameter("Kinodynamic/forceYawOrientation",True)
@@ -89,7 +88,7 @@ ps.setParameter("Kinodynamic/verticalAccelerationBound",10.)
 ps.setParameter("DynamicPlanner/sizeFootX",0.2)
 ps.setParameter("DynamicPlanner/sizeFootY",0.12)
 ps.setParameter("DynamicPlanner/friction",mu)
-ps.setParameter("Kinodynamic/velocityBound",0.4) 
+ps.setParameter("Kinodynamic/velocityBound",0.4)
 ps.setParameter("Kinodynamic/accelerationBound",0.1)
 # sample only configuration with null velocity and acceleration :
 ps.setParameter("ConfigurationShooter/sampleExtraDOF",False)
@@ -105,7 +104,7 @@ from hpp.corbaserver.affordance.affordance import AffordanceTool
 afftool = AffordanceTool ()
 afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
 
-afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.01,0.,0.])
+afftool.loadObstacleModel ("package://hpp_environments/urdf/" + "multicontact/daeun/" + pbName + ".urdf", "planning", vf,reduceSizes=[0.01,0.,0.])
 
 #load the viewer
 v = vf.createViewer(displayArrows = True)
@@ -123,7 +122,7 @@ ps.selectDistance("Kinodynamic")
 ps.selectPathPlanner("DynamicPlanner")
 
 
-# # display solution : 
+# # display solution :
 # from hpp.gepetto import PathPlayer
 # pp = PathPlayer (v)
 # pp.dt=0.1
@@ -146,16 +145,16 @@ from sl1m.problem_definition import *
 from sl1m.planner_scenarios.talos.constraints import *
 from numpy import array, asmatrix, matrix, ones
 
-# generate problem 
+# generate problem
 def gen_pb(init, c0, R, surfaces):
-    
+
     nphases = len(surfaces)
     res = { "p0" : init, "c0" : c0, "nphases": nphases}
-    
+
     # phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [copyKin(kinematicConstraints) for _ in range(len(surfaces[i]))], "relativeK" : [relativeConstraints[(i)%2] for _ in range(len(surfaces[i]))], "S" : surfaces[i] } for i in range(nphases)]
     phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [genKinematicConstraints(left_foot_constraints,right_foot_constraints,index = i, rotation = R, min_height = 0.3) for _ in range(len(surfaces[i]))], "relativeK" : [genFootRelativeConstraints(right_foot_in_lf_frame_constraints,left_foot_in_rf_frame_constraints,index = i, rotation = R)[(i) % 2] for _ in range(len(surfaces[i]))], "rootOrientation" : R[i], "S" : surfaces[i] } for i in range(nphases)]
     res ["phaseData"] = phaseData
-    return res 
+    return res
 
 def footPosFromCOM(init_com):
     lf_0 = array(init_com[0:3]) + array([0, 0.085,-0.98])
@@ -178,23 +177,23 @@ def plotSurface (points, ax, plt,color_id = -1):
     colors = ['r','g','b','m','y','c']
     if color_id == -1: ax.plot(xs,ys,zs)
     else: ax.plot(xs,ys,zs, color = colors[color_id%6])
-        
+
 def draw_scene(surfaces, ax = None):
     colors = ['r','g','b','m','y','c']
     color_id = 0
-    if ax is None:        
+    if ax is None:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
     # [draw_rectangle(l,ax) for l in all_surfaces]
-    for i, surfaces_phase in enumerate(surfaces): 
+    for i, surfaces_phase in enumerate(surfaces):
         for surface in surfaces_phase:
             plotSurface(surface, ax, plt, color_id)
         color_id += 1
-        
+
     plt.ion()
     plt.show()
-    
-    return ax    
+
+    return ax
 
 
 import pickle
@@ -208,7 +207,7 @@ def readFromFile (fileName):
             line = pickle.load(f)
           except EOFError:
             break
-          data.append(line)  
+          data.append(line)
   except:
       return None
   return data[0]
@@ -239,7 +238,7 @@ if COST:
         candidate_num = data[1]
         mip_comp_gr = data[2]
         fail = data[3]
-    else :    
+    else :
         phase_num = []
         candidate_num = []
         mip_comp_gr = []
@@ -253,23 +252,23 @@ else:
         fail1 = data[4]
         fail2 = data[5]
         failcase = data[6]
-    else :    
+    else :
         phase_num = []
         candidate_num = []
         mip_comp_gr = []
         sl1m_comp_gr = []
         fail1 = 0
         fail2 = 0
-        failcase = [] 
-    
+        failcase = []
+
 
 
 
 from sl1m.fix_sparsity import solveMIP, solveMIP_cost, solveL1
-from random import *   
+from random import *
 
-while run < MAX_RUN : 
-    ps.resetGoalConfigs()  
+while run < MAX_RUN :
+    ps.resetGoalConfigs()
     q_init = rbprmBuilder.getCurrentConfig ()
     ### path planning
     q_init [0:3] = [-1.3,0.8,0.98]
@@ -278,20 +277,20 @@ while run < MAX_RUN :
     p_goal = [1.4,0.8,0.98]
     #p_goal = [1.6,0.8,0.98]
     q_goal[0:3] = p_goal
-    
+
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
 
     s_p0 = ps.getInitialConfig()[0:3]; init = footPosFromCOM(s_p0)
 
     t = ps.solve ()
-    print "done planning, optimize path ..."
+    print ("done planning, optimize path ...")
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
 
     path_rubbles = ps.numberPaths() -1
-    print "done optimizing."
+    print ("done optimizing.")
 
     ## turn around
     ps.resetGoalConfigs()
@@ -303,7 +302,7 @@ while run < MAX_RUN :
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
     t = ps.solve ()
-    print "done planning, optimize path ..."
+    print ("done planning, optimize path ...")
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
@@ -320,7 +319,7 @@ while run < MAX_RUN :
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
     t = ps.solve ()
-    print "done planning, optimize path ..."
+    print ("done planning, optimize path ...")
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
@@ -331,7 +330,7 @@ while run < MAX_RUN :
     ps.concatenatePath(pathId,path_turn)
     ps.concatenatePath(pathId,path_stairs)
 
-    # display solution : 
+    # display solution :
     #from hpp.gepetto import PathPlayer
     #pp = PathPlayer (v)
     #pp.dt=0.1
@@ -344,11 +343,11 @@ while run < MAX_RUN :
     # q_far[2] = -5
     # v(q_far)
 
-    
-    ### contact planning
-    print "############### run : ", run+1
 
-    
+    ### contact planning
+    print ("############### run : ", run+1)
+
+
     g_p0 = ps.getGoalConfigs()[0][0:3]; goal = footPosFromCOM(g_p0)
 
     if COST:
@@ -372,23 +371,23 @@ while run < MAX_RUN :
         pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
         ### solve
         res_MI = solveMIP_cost(pb, surfaces,p_goal, draw_scene, PLOT, CPP)
-        
+
         print(res_MI)
-        
+
         if not res_MI.success: # MIP FAIL
             fail+=1
             continue
         else:
             mip_comp_gr += [res_MI.time]
 
-        
+
         total_candidate = 0
         for surfs in surfaces:
             total_candidate += len(surfs)
 
         phase_num += [phase]
         candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
-        
+
         run += 1
 
     else:
@@ -408,9 +407,9 @@ while run < MAX_RUN :
         pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
         ### solve
         res_MI = solveMIP(pb, surfaces, draw_scene, PLOT, CPP)
-        
+
         print(res_MI)
-        
+
         if not res_MI.success: # MIP FAIL
             continue
         else:
@@ -441,42 +440,38 @@ while run < MAX_RUN :
         if not res_L1.success: # SL1M FAIL
             fail1 += 1
             failcase +=[res_L1.case]
+        else:
+            run += 1
 
-        ########################## validation with MIP ##########################
+        # ########################## validation with MIP ##########################
+        #
+        # if res_L1.success:
+        #     pb_ = readFromFile("pb")
+        #     surfaces_ = []
+        #     for phase_ in pb_["phaseData"]:
+        #         surfaces_ += [phase_["S"]]
+        #     res_MI_validation = solveMIP(pb_, surfaces_, draw_scene, PLOT, CPP)
+        #     print(res_MI_validation)
+        #
+        #     if not res_MI_validation.success: # SL1M UNFEASIBLE
+        #         fail2 += 1
+        #     else:
+        #         sl1m_comp_gr += [res_L1.time]
+        #         if TEST:
+        #             with open(fileName+"_res",'wb') as f:
+        #                 pickle.dump(res_L1.res, f)
+        #
+        # phase_num += [phase]
+        # candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
+        #
 
-        if res_L1.success:
-            pb_ = readFromFile("pb")
-            surfaces_ = []
-            for phase_ in pb_["phaseData"]:
-                surfaces_ += [phase_["S"]]
-            res_MI_validation = solveMIP(pb_, surfaces_, draw_scene, PLOT, CPP)
-            print(res_MI_validation)
-
-            if not res_MI_validation.success: # SL1M UNFEASIBLE
-                fail2 += 1
-            else:
-                sl1m_comp_gr += [res_L1.time] 
-                if TEST:
-                    with open(fileName+"_res",'wb') as f:
-                        pickle.dump(res_L1.res, f)
-        
-        phase_num += [phase]
-        candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
-        
-        run += 1
-    
-if COST:
-    data = [phase_num, candidate_num, mip_comp_gr, fail]
-    if SAVE:
-        with open(fileName,'wb') as f:
-            pickle.dump(data,f)
-else:
-    data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
-    if SAVE:
-        with open(fileName,'wb') as f:
-            pickle.dump(data,f) 
-
-
-    
-        
-
+# if COST:
+#     data = [phase_num, candidate_num, mip_comp_gr, fail]
+#     if SAVE:
+#         with open(fileName,'wb') as f:
+#             pickle.dump(data,f)
+# else:
+#     data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
+#     if SAVE:
+#         with open(fileName,'wb') as f:
+#             pickle.dump(data,f)
