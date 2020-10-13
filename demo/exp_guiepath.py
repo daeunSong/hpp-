@@ -11,8 +11,8 @@ Robot.urdfName += "_large"
 
 packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
-I = 2
-TEST = False
+I = 0
+TEST = True
 GUIDE = True
 CONTINUOUS = False
 INTERSECT = True
@@ -367,16 +367,18 @@ while run < MAX_RUN :
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
 
-    t1 = clock()
+    import time
+    current_milli_time = lambda: int(round(time.time() * 1000))
+
+    t1 = current_milli_time()
     t = ps.solve ()
-    t2 = clock()
+    t2 = current_milli_time()
 
     print ("done planning, optimize path ...")
 
-    def timMs(t1, t2):
-        return (t2-t1) * 1000.
+    print (t[-1], t2-t1)
 
-    time += timMs(t1,t2)
+    time += t2-t1
     run += 1
 
 print (time/100)
