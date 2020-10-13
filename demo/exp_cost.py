@@ -1,7 +1,7 @@
-from hpp.corbaserver.rbprm.talos_abstract import Robot
-from hpp.corbaserver.problem_solver import ProblemSolver
+from talos_rbprm.talos_abstract import Robot
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
+from hpp.corbaserver import ProblemSolver
 import pickle
 Robot.urdfName += "_large"
 
@@ -10,7 +10,7 @@ Robot.urdfName += "_large"
 
 packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
-I = 2
+I = 0
 TEST = False
 GUIDE = False
 CONTINUOUS = False
@@ -29,7 +29,7 @@ if not GUIDE:
     step_num = step_nums[I]
 else:
     if INTERSECT:
-        fileName += "_Wi" 
+        fileName += "_Wi"
     else: fileName += "_Ww"
     if CONTINUOUS:
         fileName += "_c"
@@ -61,7 +61,7 @@ if pbName == 'playground':
     from random import *
     LIST_LINKS = [[[[-0.5, 0.5], [1.5, 2.5], [0.0, 0.02]], [[1.5, 2.5], [1.5, 2.5], [0.0, 0.02]]], [[[-0.5, 0.5], [1.5, 2.5], [0.0, 0.02]], [[-0.5, 0.5], [3.5, 4.5], [0.0, 0.02]]], [[[-0.5, 0.5], [3.5, 4.5], [0.0, 0.02]], [[1.5, 2.5], [3.5, 4.5], [0.0, 0.02]]], [[[-0.5, 0.5], [3.5, 4.5], [0.0, 0.02]], [[-0.5, 0.5], [7.5, 8.5], [-0.665, -0.645]]], [[[-0.5, 0.5], [7.5, 8.5], [-0.665, -0.645]], [[-0.5, 0.5], [11.5, 12.5], [-0.39428571428571424, -0.3742857142857142]]], [[[-0.5, 0.5], [11.5, 12.5], [-0.39428571428571424, -0.3742857142857142]], [[-0.5, 0.5], [15.5, 16.5], [-0.42500000000000004, -0.405]]], [[[1.5, 2.5], [1.5, 2.5], [0.0, 0.02]], [[5.5, 6.5], [1.5, 2.5], [0.0, 0.02]]], [[[1.5, 2.5], [1.5, 2.5], [0.0, 0.02]], [[1.5, 2.5], [3.5, 4.5], [0.0, 0.02]]], [[[1.5, 2.5], [3.5, 4.5], [0.0, 0.02]], [[1.5, 2.5], [5.5, 6.5], [0.0, 0.02]]], [[[1.5, 2.5], [5.5, 6.5], [0.0, 0.02]], [[1.5, 2.5], [9.5, 10.5], [-0.39428571428571424, -0.3742857142857142]]], [[[1.5, 2.5], [9.5, 10.5], [-0.39428571428571424, -0.3742857142857142]], [[5.5, 6.5], [9.5, 10.5], [0.0, 0.02]]], [[[1.5, 2.5], [9.5, 10.5], [-0.39428571428571424, -0.3742857142857142]], [[1.5, 2.5], [13.5, 14.5], [-0.9685714285714285, -0.9485714285714285]]], [[[1.5, 2.5], [13.5, 14.5], [-0.9685714285714285, -0.9485714285714285]], [[1.5, 2.5], [17.5, 18.5], [-0.9685714285714285, -0.9485714285714285]]], [[[5.5, 6.5], [1.5, 2.5], [0.0, 0.02]], [[7.5, 8.5], [1.5, 2.5], [0.0, 0.02]]], [[[5.5, 6.5], [9.5, 10.5], [0.0, 0.02]], [[5.5, 6.5], [13.5, 14.5], [0.062380952380952315, 0.08238095238095232]]], [[[5.5, 6.5], [13.5, 14.5], [0.062380952380952315, 0.08238095238095232]], [[5.5, 6.5], [17.5, 18.5], [0.062380952380952315, 0.08238095238095232]]], [[[5.5, 6.5], [17.5, 18.5], [0.062380952380952315, 0.08238095238095232]], [[7.5, 8.5], [17.5, 18.5], [0.062380952380952315, 0.08238095238095232]]], [[[7.5, 8.5], [1.5, 2.5], [0.0, 0.02]], [[9.5, 10.5], [1.5, 2.5], [0.0, 0.02]]], [[[7.5, 8.5], [1.5, 2.5], [0.0, 0.02]], [[7.5, 8.5], [5.5, 6.5], [0.0, 0.02]]], [[[7.5, 8.5], [11.5, 12.5], [0.062380952380952315, 0.08238095238095232]], [[7.5, 8.5], [15.5, 16.5], [0.0, 0.02]]], [[[7.5, 8.5], [15.5, 16.5], [0.0, 0.02]], [[7.5, 8.5], [17.5, 18.5], [0.062380952380952315, 0.08238095238095232]]], [[[9.5, 10.5], [1.5, 2.5], [0.0, 0.02]], [[11.5, 12.5], [1.5, 2.5], [0.0, 0.02]]], [[[9.5, 10.5], [1.5, 2.5], [0.0, 0.02]], [[9.5, 10.5], [3.5, 4.5], [0.0, 0.02]]], [[[11.5, 12.5], [11.5, 12.5], [0.0, 0.02]], [[11.5, 12.5], [13.5, 14.5], [0.0, 0.02]]], [[[11.5, 12.5], [13.5, 14.5], [0.0, 0.02]], [[11.5, 12.5], [17.5, 18.5], [0.0, 0.02]]]]
     index = 2#randint(0, len(LIST_LINKS))
-    print "LINK INDEX:", index
+    print ("LINK INDEX:", index)
     start_r = LIST_LINKS[index][0]#11
     goal_r = LIST_LINKS[index][1]#41
     p_start = [uniform(l,u) for (l,u) in start_r]; p_start[2] += 0.98
@@ -69,7 +69,7 @@ if pbName == 'playground':
     # q_init[0:3]=p_start
     # q_goal[0:3]=p_goal
     # v(q_init)
-    
+
     x_min = min([set[0][0][0] for set in LIST_LINKS]+[set[1][0][0] for set in LIST_LINKS])
     x_max = max([set[0][0][1] for set in LIST_LINKS]+[set[1][0][1] for set in LIST_LINKS])
     y_min = min([set[0][1][0] for set in LIST_LINKS]+[set[1][1][0] for set in LIST_LINKS])
@@ -116,9 +116,9 @@ rbprmBuilder.client.robot.setExtraConfigSpaceBounds(extraDofBounds)
 indexECS = rbprmBuilder.getConfigSize() - rbprmBuilder.client.robot.getDimensionExtraConfigSpace()
 
 
-# Creating an instance of HPP problem solver 
+# Creating an instance of HPP problem solver
 ps = ProblemSolver( rbprmBuilder )
-# define parameters used by various methods : 
+# define parameters used by various methods :
 ps.setParameter("Kinodynamic/velocityBound",vMax)
 ps.setParameter("Kinodynamic/accelerationBound",aMax)
 ps.setParameter("Kinodynamic/forceYawOrientation",True)
@@ -129,14 +129,14 @@ ps.setParameter("DynamicPlanner/sizeFootY",0.12)
 ps.setParameter("DynamicPlanner/friction",mu)
 if pbName in ['stairs_2', 'rubbles_stairs_1', 'playground']:
     step_size = 1.0
-    ps.setParameter("Kinodynamic/velocityBound",0.3) 
+    ps.setParameter("Kinodynamic/velocityBound",0.3)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 elif pbName == 'debris':
     step_size = 0.9
-    ps.setParameter("Kinodynamic/velocityBound",0.4) 
+    ps.setParameter("Kinodynamic/velocityBound",0.4)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 if pbName == 'rubbles_stairs_1':
-    ps.setParameter("Kinodynamic/velocityBound",0.25) 
+    ps.setParameter("Kinodynamic/velocityBound",0.25)
 # sample only configuration with null velocity and acceleration :
 ps.setParameter("ConfigurationShooter/sampleExtraDOF",False)
 ps.setParameter("PathOptimization/RandomShortcut/NumberOfLoops",100)
@@ -152,11 +152,15 @@ afftool = AffordanceTool ()
 afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
 
 if pbName == 'ground':
-    afftool.loadObstacleModel (packageName, "multicontact/ground", "planning", vf) # flat ground
-elif pbName == 'stairs':
-    afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.15,0.,0.])
+    # afftool.loadObstacleModel (packageName, "multicontact/ground", "planning", vf) # flat ground
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/" + "multicontact/ground" + ".urdf", "planning", vf) # flat ground
+
+elif pbName == 'stairs' or pbName == 'debris':
+    # afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/" + "multicontact/daeun/" + pbName + ".urdf", "planning", vf,reduceSizes=[0.015,0.,0.])
 else:
-    afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
+    # afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/" + "multicontact/daeun/" + pbName + ".urdf", "planning", vf) # flat ground
 
 #load the viewer
 v = vf.createViewer(displayArrows = True)
@@ -176,12 +180,12 @@ v.addLandmark(v.sceneName,1)
 #     q_goal = q_init [::]
 #     q_goal[0:3] = [1.87,0.9,1.58]
 # else:
-#     q_init [0:3] = p_start 
+#     q_init [0:3] = p_start
 #     q_goal = q_init [::]
-#     q_goal [0:3] = p_goal 
+#     q_goal [0:3] = p_goal
 #     q_goal[-6:-3] = [0,0,0]
 
-    
+
 # ps.setInitialConfig (q_init)
 # ps.addGoalConfig (q_goal)
 # v(q_goal)
@@ -203,7 +207,7 @@ ps.selectPathPlanner("DynamicPlanner")
 #     ps.optimizePath(ps.numberPaths()-1)
 # pathId = ps.numberPaths() -1
 
-# # display solution : 
+# # display solution :
 # from hpp.gepetto import PathPlayer
 # pp = PathPlayer (v)
 # pp.dt=0.1
@@ -226,16 +230,16 @@ from sl1m.problem_definition import *
 from sl1m.planner_scenarios.talos.constraints import *
 from numpy import array, asmatrix, matrix, ones
 
-# generate problem 
+# generate problem
 def gen_pb(init, c0, R, surfaces):
-    
+
     nphases = len(surfaces)
     res = { "p0" : init, "c0" : c0, "nphases": nphases}
-    
+
     # phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [copyKin(kinematicConstraints) for _ in range(len(surfaces[i]))], "relativeK" : [relativeConstraints[(i)%2] for _ in range(len(surfaces[i]))], "S" : surfaces[i] } for i in range(nphases)]
     phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [genKinematicConstraints(left_foot_constraints,right_foot_constraints,index = i, rotation = R, min_height = 0.3) for _ in range(len(surfaces[i]))], "relativeK" : [genFootRelativeConstraints(right_foot_in_lf_frame_constraints,left_foot_in_rf_frame_constraints,index = i, rotation = R)[(i) % 2] for _ in range(len(surfaces[i]))], "rootOrientation" : R[i], "S" : surfaces[i] } for i in range(nphases)]
     res ["phaseData"] = phaseData
-    return res 
+    return res
 
 def footPosFromCOM(init_com):
     lf_0 = array(init_com[0:3]) + array([0, 0.085,-0.98])
@@ -258,23 +262,23 @@ def plotSurface (points, ax, plt,color_id = -1):
     colors = ['r','g','b','m','y','c']
     if color_id == -1: ax.plot(xs,ys,zs)
     else: ax.plot(xs,ys,zs, color = colors[color_id%6])
-        
+
 def draw_scene(surfaces, ax = None):
     colors = ['r','g','b','m','y','c']
     color_id = 0
-    if ax is None:        
+    if ax is None:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
     # [draw_rectangle(l,ax) for l in all_surfaces]
-    for i, surfaces_phase in enumerate(surfaces): 
+    for i, surfaces_phase in enumerate(surfaces):
         for surface in surfaces_phase:
             plotSurface(surface, ax, plt, color_id)
         color_id += 1
-        
+
     plt.ion()
     plt.show()
-    
-    return ax    
+
+    return ax
 
 
 import pickle
@@ -288,7 +292,7 @@ def readFromFile (fileName):
             line = pickle.load(f)
           except EOFError:
             break
-          data.append(line)  
+          data.append(line)
   except:
       return None
   return data[0]
@@ -318,7 +322,7 @@ if data != None:
     candidate_num = data[1]
     mip_comp_gr = data[2]
     fail = data[3]
-else :    
+else :
     phase_num = []
     candidate_num = []
     mip_comp_gr = []
@@ -326,10 +330,10 @@ else :
 
 
 
-from sl1m.fix_sparsity import solveMIP_cost
-from random import *   
+from sl1m.fix_sparsity import solveMIP_cost, solveMIP
+from random import *
 
-while run < MAX_RUN :   
+while run < MAX_RUN :
     q_init = rbprmBuilder.getCurrentConfig ()
     ### path planning
     if pbName == 'ground':
@@ -350,33 +354,33 @@ while run < MAX_RUN :
         p_goal = [1.8,0.8,0.98]
         q_goal[0:3] = p_goal
     else:
-        q_init [0:3] = p_start 
+        q_init [0:3] = p_start
         q_goal = q_init [::]
-        q_goal [0:3] = p_goal 
+        q_goal [0:3] = p_goal
         q_goal[-6:-3] = [0,0,0]
         #if pbName == 'playground':
             #q_init[3:7]=[0,0,-0.7071,0.7071]
             #q_goal[3:7]=[0,0,-0.7071,0.7071]
-        
+
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
 
     t = ps.solve ()
-    print "done planning, optimize path ..."
+    print ("done planning, optimize path ...")
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
 
     pathId = ps.numberPaths() -1
-    print "done optimizing."
+    print ("done optimizing.")
 
-    
+
     ### contact planning
-    print "############### run : ", run+1
+    print ("############### run : ", run+1)
 
     s_p0 = ps.getInitialConfig()[0:3]; init = footPosFromCOM(s_p0)
     g_p0 = ps.getGoalConfigs()[0][0:3]; goal = footPosFromCOM(g_p0)
-    
+
     ################################ MIP ################################
     ### generate contact candidates
     if GUIDE:
@@ -395,31 +399,35 @@ while run < MAX_RUN :
     pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
     ### solve
     res_MI = solveMIP_cost(pb, surfaces,p_goal, draw_scene, PLOT, CPP)
-    
+
     print(res_MI)
-    
+
     if not res_MI.success: # MIP FAIL
         fail+=1
         continue
     else:
         mip_comp_gr += [res_MI.time]
 
-    
+    ## MIP COST
+    pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
+    ### solve
+    res_MI = solveMIP(pb, surfaces, draw_scene, PLOT, CPP, True)
+
+    print(res_MI)
+
     total_candidate = 0
     for surfs in surfaces:
         total_candidate += len(surfs)
 
     phase_num += [phase]
     candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
-    
+
     run += 1
-    
-        
+
+
 data = [phase_num, candidate_num, mip_comp_gr, fail]
 
 
 if SAVE:
     with open(fileName,'wb') as f:
         pickle.dump(data,f)
-
-
