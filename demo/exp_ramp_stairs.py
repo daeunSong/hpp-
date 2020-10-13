@@ -1,4 +1,4 @@
-from hpp.corbaserver.rbprm.talos_abstract import Robot
+from talos_rbprm.talos_abstract import Robot 
 from hpp.corbaserver.problem_solver import ProblemSolver
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
@@ -39,9 +39,9 @@ else:
     if CONTINUOUS:
         fileName += "_c"
 
-step_size = 0.9
+step_size = 0.75
 if CONTINUOUS:
-    step_size = 1.0
+    step_size = 0.85
 
 SOLVER = 0 # GUROBI
 CPP = True
@@ -105,7 +105,9 @@ from hpp.corbaserver.affordance.affordance import AffordanceTool
 afftool = AffordanceTool ()
 afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
 
-afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.01,0.,0.])
+# ~ afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.015,0.,0.])
+afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.07,0.,0.])
+
 
 #load the viewer
 v = vf.createViewer(displayArrows = True)
@@ -132,7 +134,7 @@ ps.selectPathPlanner("DynamicPlanner")
 # pp.dt = 0.01
 # #pp(pathId)
 
-# q_far = q_goal[::]
+# q_far = q_goal[::]##
 # q_far[2] = -5
 # v(q_far)
 
@@ -222,7 +224,7 @@ cnt = 0
 data = readFromFile(fileName)
 
 if TEST:
-    PLOT = True
+    PLOT = False
     SAVE = False
     OPT = True
     MAX_RUN = 1
@@ -285,17 +287,17 @@ while run < MAX_RUN :
     s_p0 = ps.getInitialConfig()[0:3]; init = footPosFromCOM(s_p0)
 
     t = ps.solve ()
-    print "done planning, optimize path ..."
+    print ("done planning, optimize path ...")
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
 
     path_rubbles = ps.numberPaths() -1
-    print "done optimizing."
+    print ("done optimizing.")
 
     ## turn around
     ps.resetGoalConfigs()
-    ps.setParameter("Kinodynamic/velocityBound",0.3)
+    ps.setParameter("Kinodynamic/velocityBound",0.2)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
     q_init = q_goal [::]
     q_goal[0:7] = [1.8,0.2,0.98,0,0,-0.7071,0.7071]
@@ -303,7 +305,7 @@ while run < MAX_RUN :
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
     t = ps.solve ()
-    print "done planning, optimize path ..."
+    print ("done planning, optimize path ...")
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
@@ -320,7 +322,7 @@ while run < MAX_RUN :
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
     t = ps.solve ()
-    print "done planning, optimize path ..."
+    print ("done planning, optimize path ...")
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
@@ -346,7 +348,7 @@ while run < MAX_RUN :
 
     
     ### contact planning
-    print "############### run : ", run+1
+    print ("############### run : ", run+1)
 
     
     g_p0 = ps.getGoalConfigs()[0][0:3]; goal = footPosFromCOM(g_p0)
@@ -445,7 +447,8 @@ while run < MAX_RUN :
         ########################## validation with MIP ##########################
 
         if res_L1.success:
-            pb_ = readFromFile("pb")
+            # ~ pb_ = readFromFile("pb")
+            pb_ = gen_pb(init, s_p0, R, surfaces)
             surfaces_ = []
             for phase_ in pb_["phaseData"]:
                 surfaces_ += [phase_["S"]]
@@ -476,7 +479,29 @@ else:
         with open(fileName,'wb') as f:
             pickle.dump(data,f) 
 
+from talos_rbprm.talos import Robot    as talosFull                                                                                              
+fb2 = talosFull()   
+allfeetpos = res_L1.res[2]
 
-    
-        
+z_offset=0.05
 
+q_init = fb2.referenceConfig.copy()
+# ~ q_init[:3] = p_start 
+q_end = q_init.copy()
+# ~ q_end [0:3] = p_goal 
+# ~ q_end[-6:-3] = [0,0,0.]
+from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
+
+pb = res_L1.pb
+del pb["phaseData"][0];
+replace_surfaces_with_ineq_in_problem(pb)
+
+q_init[:7] = ps.configAtParam(pathId, 0.001)[:7]
+q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
+q_end[2] += z_offset
+q_init[2] += z_offset
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
+cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset= 0.01) 
+cs.saveAsBinary("talos_ramp_stairs2.cs")   
+
+v(q_init)
