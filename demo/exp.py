@@ -167,7 +167,7 @@ elif pbName == 'stairs':
     afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.15,0.,0.])
 elif pbName == 'debris':
     # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])    
-    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.02,0.,0.])
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.03,0.,0.])
 else:
     afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf)
     # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
@@ -514,7 +514,9 @@ q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
 q_end[2] += z_offset
 q_init[2] += z_offset
 from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
-cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.01) 
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
+cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.005) 
+# ~ cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.05) 
 cs.saveAsBinary("talos_debris.cs")   
 
 v(q_init)
