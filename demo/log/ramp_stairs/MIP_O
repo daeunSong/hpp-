@@ -1,0 +1,60 @@
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 18 23:17:30 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 9635 rows, 1466 columns and 36200 nonzeros
+Model fingerprint: 0xcd7eea0c
+Model has 3 quadratic objective terms
+Variable types: 791 continuous, 675 integer (675 binary)
+Coefficient statistics:
+  Matrix range     [5e-12, 1e+00]
+  Objective range  [2e+00, 5e+00]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Presolve removed 2859 rows and 842 columns
+Presolve time: 1.46s
+Presolved: 6776 rows, 624 columns, 47647 nonzeros
+Presolved model has 2 quadratic objective terms
+Variable types: 111 continuous, 513 integer (513 binary)
+
+Root relaxation: objective 3.600000e-01, 1831 iterations, 0.05 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.36000    0   47          -    0.36000      -     -    3s
+     0     0    0.36000    0   57          -    0.36000      -     -    4s
+     0     0    0.36000    0   57          -    0.36000      -     -    4s
+     0     0    0.36000    0   66          -    0.36000      -     -    4s
+     0     0    0.36000    0   65          -    0.36000      -     -    4s
+     0     0    0.36000    0   69          -    0.36000      -     -    5s
+     0     0    0.36000    0   70          -    0.36000      -     -    5s
+     0     0    0.36000    0   69          -    0.36000      -     -    5s
+     0     0    0.36000    0   68          -    0.36000      -     -    6s
+     0     0    0.36000    0   67          -    0.36000      -     -    6s
+     0     2    0.36000    0   67          -    0.36000      -     -   10s
+   444   286    0.36000   38   40          -    0.36000      -   297   15s
+* 2864   824             106       0.4814307    0.36000  25.2%   118   19s
+H 2957   798                       0.4814306    0.36000  25.2%   119   19s
+  2958   799    0.36012   82   67    0.48143    0.36000  25.2%   119   46s
+
+Cutting planes:
+  Learned: 3
+  Cover: 191
+  Implied bound: 3
+  Projected implied bound: 17
+  Clique: 26
+  MIR: 145
+  StrongCG: 44
+  Flow cover: 106
+  Relax-and-lift: 25
+
+Explored 2960 nodes (358172 simplex iterations) in 47.70 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 2: 0.481431 0.481431 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 4.814306382428e-01, best bound 4.814306382428e-01, gap 0.0000%

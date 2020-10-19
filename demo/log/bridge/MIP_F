@@ -1,0 +1,32 @@
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 18 22:54:16 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0xfb507472
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [1e+00, 1e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Presolve removed 1474 rows and 90 columns
+Presolve time: 0.06s
+Presolved: 1516 rows, 58 columns, 6796 nonzeros
+Variable types: 48 continuous, 10 integer (10 binary)
+
+Root relaxation: objective 2.800000e+01, 86 iterations, 0.00 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0   28.00000    0    1          -   28.00000      -     -    0s
+H    0     0                      28.0000000   28.00000  0.00%     -    0s
+
+Explored 1 nodes (86 simplex iterations) in 0.10 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 28 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 2.800000000000e+01, best bound 2.800000000000e+01, gap 0.0000%
