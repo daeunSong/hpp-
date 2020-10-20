@@ -1,5 +1,5 @@
 # ~ from hpp.corbaserver.rbprm.talos_abstract import Robot
-from talos_rbprm.talos_abstract import Robot 
+from talos_rbprm.talos_abstract import Robot
 from hpp.corbaserver.problem_solver import ProblemSolver
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
@@ -30,7 +30,7 @@ if not GUIDE:
     step_num = step_nums[I]
 else:
     if INTERSECT:
-        fileName += "_Wi" 
+        fileName += "_Wi"
     else: fileName += "_Ww"
     if CONTINUOUS:
         fileName += "_c"
@@ -70,7 +70,7 @@ if pbName == 'playground':
     # q_init[0:3]=p_start
     # q_goal[0:3]=p_goal
     # v(q_init)
-    
+
     x_min = min([set[0][0][0] for set in LIST_LINKS]+[set[1][0][0] for set in LIST_LINKS])
     x_max = max([set[0][0][1] for set in LIST_LINKS]+[set[1][0][1] for set in LIST_LINKS])
     y_min = min([set[0][1][0] for set in LIST_LINKS]+[set[1][1][0] for set in LIST_LINKS])
@@ -117,9 +117,9 @@ rbprmBuilder.client.robot.setExtraConfigSpaceBounds(extraDofBounds)
 indexECS = rbprmBuilder.getConfigSize() - rbprmBuilder.client.robot.getDimensionExtraConfigSpace()
 
 
-# Creating an instance of HPP problem solver 
+# Creating an instance of HPP problem solver
 ps = ProblemSolver( rbprmBuilder )
-# define parameters used by various methods : 
+# define parameters used by various methods :
 ps.setParameter("Kinodynamic/velocityBound",vMax)
 ps.setParameter("Kinodynamic/accelerationBound",aMax)
 ps.setParameter("Kinodynamic/forceYawOrientation",True)
@@ -130,7 +130,7 @@ ps.setParameter("DynamicPlanner/sizeFootY",0.12)
 ps.setParameter("DynamicPlanner/friction",mu)
 if pbName in ['stairs_2', 'rubbles_stairs_1','stairs']:
     step_size = 1.0
-    ps.setParameter("Kinodynamic/velocityBound",0.3) 
+    ps.setParameter("Kinodynamic/velocityBound",0.3)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 elif pbName in ['stairs']:
     step_size = 0.9
@@ -145,7 +145,7 @@ elif pbName == 'debris':
     ps.setParameter("Kinodynamic/velocityBound",0.4) 
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 if pbName == 'rubbles_stairs_1':
-    ps.setParameter("Kinodynamic/velocityBound",0.25) 
+    ps.setParameter("Kinodynamic/velocityBound",0.25)
 # sample only configuration with null velocity and acceleration :
 ps.setParameter("ConfigurationShooter/sampleExtraDOF",False)
 ps.setParameter("PathOptimization/RandomShortcut/NumberOfLoops",100)
@@ -190,12 +190,12 @@ v.addLandmark(v.sceneName,1)
 #     q_goal = q_init [::]
 #     q_goal[0:3] = [1.87,0.9,1.58]
 # else:
-#     q_init [0:3] = p_start 
+#     q_init [0:3] = p_start
 #     q_goal = q_init [::]
-#     q_goal [0:3] = p_goal 
+#     q_goal [0:3] = p_goal
 #     q_goal[-6:-3] = [0,0,0]
 
-    
+
 # ps.setInitialConfig (q_init)
 # ps.addGoalConfig (q_goal)
 # v(q_goal)
@@ -217,7 +217,7 @@ ps.selectPathPlanner("DynamicPlanner")
 #     ps.optimizePath(ps.numberPaths()-1)
 # pathId = ps.numberPaths() -1
 
-# # display solution : 
+# # display solution :
 # from hpp.gepetto import PathPlayer
 # pp = PathPlayer (v)
 # pp.dt=0.1
@@ -240,16 +240,16 @@ from sl1m.problem_definition import *
 from sl1m.planner_scenarios.talos.constraints import *
 from numpy import array, asmatrix, matrix, ones
 
-# generate problem 
+# generate problem
 def gen_pb(init, c0, R, surfaces):
-    
+
     nphases = len(surfaces)
     res = { "p0" : init, "c0" : c0, "nphases": nphases}
-    
+
     # phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [copyKin(kinematicConstraints) for _ in range(len(surfaces[i]))], "relativeK" : [relativeConstraints[(i)%2] for _ in range(len(surfaces[i]))], "S" : surfaces[i] } for i in range(nphases)]
     phaseData = [ {"moving" : i%2, "fixed" : (i+1) % 2 , "K" : [genKinematicConstraints(left_foot_constraints,right_foot_constraints,index = i, rotation = R, min_height = 0.3) for _ in range(len(surfaces[i]))], "relativeK" : [genFootRelativeConstraints(right_foot_in_lf_frame_constraints,left_foot_in_rf_frame_constraints,index = i, rotation = R)[(i) % 2] for _ in range(len(surfaces[i]))], "rootOrientation" : R[i], "S" : surfaces[i] } for i in range(nphases)]
     res ["phaseData"] = phaseData
-    return res 
+    return res
 
 def footPosFromCOM(init_com):
     lf_0 = array(init_com[0:3]) + array([0, 0.085,-0.98])
@@ -272,23 +272,24 @@ def plotSurface (points, ax, plt,color_id = -1):
     colors = ['r','g','b','m','y','c']
     if color_id == -1: ax.plot(xs,ys,zs)
     else: ax.plot(xs,ys,zs, color = colors[color_id%6])
-        
+
 def draw_scene(surfaces, ax = None):
     colors = ['r','g','b','m','y','c']
     color_id = 0
-    if ax is None:        
+    if ax is None:
         fig = plt.figure()
         ax = fig.add_subplot(111, projection="3d")
     # [draw_rectangle(l,ax) for l in all_surfaces]
-    for i, surfaces_phase in enumerate(surfaces): 
+    for i, surfaces_phase in enumerate(surfaces):
         for surface in surfaces_phase:
             plotSurface(surface, ax, plt, color_id)
         color_id += 1
-        
+
     plt.ion()
     plt.show()
-    
-    return ax    
+    plt.pause(2)
+
+    return ax
 
 
 import pickle
@@ -302,7 +303,7 @@ def readFromFile (fileName):
             line = pickle.load(f)
           except EOFError:
             break
-          data.append(line)  
+          data.append(line)
   except:
       return None
   return data[0]
@@ -335,7 +336,7 @@ if data != None:
     fail1 = data[4]
     fail2 = data[5]
     failcase = data[6]
-else :    
+else :
     phase_num = []
     candidate_num = []
     mip_comp_gr = []
@@ -347,9 +348,9 @@ else :
 
 
 from sl1m.fix_sparsity import solveMIP, solveL1
-from random import *   
+from random import *
 
-while run < MAX_RUN :   
+while run < MAX_RUN :
     q_init = rbprmBuilder.getCurrentConfig ()
     ### path planning
     if pbName == 'ground':
@@ -376,11 +377,11 @@ while run < MAX_RUN :
         p_goal = [6.19,18,1.04]
         q_goal[0:3] = p_goal
     else:
-        q_init [0:3] = p_start 
+        q_init [0:3] = p_start
         q_goal = q_init [::]
-        q_goal [0:3] = p_goal 
+        q_goal [0:3] = p_goal
         q_goal[-6:-3] = [0,0,0]
-        
+
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
 
@@ -393,13 +394,13 @@ while run < MAX_RUN :
     pathId = ps.numberPaths() -1
     print ("done optimizing.")
 
-    
+
     ### contact planning
     print ("############### run : ", run+1)
 
     s_p0 = ps.getInitialConfig()[0:3]; init = footPosFromCOM(s_p0)
     g_p0 = ps.getGoalConfigs()[0][0:3]; goal = footPosFromCOM(g_p0)
-    
+
     ################################ MIP ################################
     ### generate contact candidates
     if GUIDE:
@@ -414,9 +415,9 @@ while run < MAX_RUN :
     pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
     ### solve
     res_MI = solveMIP(pb, surfaces, draw_scene, PLOT, CPP)
-    
+
     print(res_MI)
-    
+
     if not res_MI.success: # MIP FAIL
         continue
     else:
@@ -455,7 +456,7 @@ while run < MAX_RUN :
     #     if not res_MI_validation.success: # SL1M UNFEASIBLE
     #         fail2 += 1
     #     else:
-    #         sl1m_comp_gr += [res_L1.time] 
+    #         sl1m_comp_gr += [res_L1.time]
     #         # if TEST:
     #         #     with open("rubbles_stairs_res_cool",'wb') as f:
     #         #         pickle.dump(res_L1.res, f)
@@ -468,29 +469,30 @@ while run < MAX_RUN :
     #     # pos = []
     #     # for i in range(len(allfeetpos[0])):
     #     #     pos += [[allfeetpos[0][i],allfeetpos[1][i]]]
-    #     del pb["phaseData"][0]; #del pos[0]; 
+    #     del pb["phaseData"][0]; #del pos[0];
     #     # allfeetpos = pos
     #     from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
     #     replace_surfaces_with_ineq_in_problem(pb)
     #     cs = build_cs_from_sl1m_mip(pb,allfeetpos,rbprmBuilder,q_init)
     #     cs.saveAsBinary("sl1m_data/bridge.cs")
-    
+
     total_candidate = 0
     for surfs in surfaces:
         total_candidate += len(surfs)
-    
+
     phase_num += [phase]
     candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
-    
+
     run += 1
-    
-        
+
+
 data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
 
 
 if SAVE:
     with open(fileName,'wb') as f:
         pickle.dump(data,f)
+
 
 from talos_rbprm.talos import Robot    as talosFull                                                                                              
 fb2 = talosFull()   
@@ -513,6 +515,7 @@ q_init[:7] = ps.configAtParam(pathId, 0.001)[:7]
 q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
 q_end[2] += z_offset
 q_init[2] += z_offset
+
 from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
 from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
 cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.005) 

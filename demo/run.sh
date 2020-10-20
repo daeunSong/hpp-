@@ -2,7 +2,7 @@
 
 gepetto-gui &
 hpp-rbprm-server &
-ipython -i --no-confirm-exit ./$1
+python3 -i ./$1
 
 pkill -f  'gepetto-gui'
 pkill -f  'hpp-rbprm-server'

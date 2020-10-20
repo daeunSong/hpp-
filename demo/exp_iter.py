@@ -1,7 +1,8 @@
+# ~ from hpp.corbaserver.rbprm.talos_abstract import Robot
 from talos_rbprm.talos_abstract import Robot
+from hpp.corbaserver.problem_solver import ProblemSolver
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
-from hpp.corbaserver import ProblemSolver
 import pickle
 Robot.urdfName += "_large"
 
@@ -12,16 +13,16 @@ packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
 I = 0
 TEST = False
-GUIDE = False
+GUIDE = True
 CONTINUOUS = False
-INTERSECT = False
-THRESHOLD = 0.003
+INTERSECT = True
+THRESHOLD = 0.001
 
 pbNames = ['bridge_1','stairs','debris','rubbles_1','rubbles_stairs_1','ground', 'playground']
 step_nums = [16,9,14,12,36,19,0]
 pbName = pbNames[I]
 
-folderName = "exp_cost/1/"
+folderName = "exp/1/"
 fileName = folderName+pbName
 
 if not GUIDE:
@@ -44,7 +45,7 @@ CPP = True
 #################################################################
 #################################################################
 
-if pbName not in ['stairs', 'ground','debris']:
+if pbName not in ['stairs', 'ground', 'debris']:
     f = open('data/pb_config/'+pbName+".txt",'r')
     line = f.readline().split()
     p_start = [float(v) for v in line]; p_start[2] += 0.98
@@ -90,7 +91,7 @@ rbprmBuilder = Robot ()
 # Define bounds for the root : bounding box of the scenario
 if pbName == 'ground':
     rbprmBuilder.setJointBounds ("root_joint", [-5, 5, -1.5, 1.5, 0.95, rbprmBuilder.ref_height]) #flat ground
-elif pbName == 'stairs':
+elif pbName == 'stairs' :
     rbprmBuilder.setJointBounds ("root_joint", [-2.5,3,0.,3.3, 0.95, 2.])
 elif pbName == 'debris' :
     rbprmBuilder.setJointBounds ("root_joint", [-10,10 ,-10, 10, 0.95, 2.])
@@ -152,15 +153,13 @@ afftool = AffordanceTool ()
 afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
 
 if pbName == 'ground':
-    # afftool.loadObstacleModel (packageName, "multicontact/ground", "planning", vf) # flat ground
-    afftool.loadObstacleModel ("package://hpp_environments/urdf/" + "multicontact/ground" + ".urdf", "planning", vf) # flat ground
-
+    afftool.loadObstacleModel (packageName, "multicontact/ground", "planning", vf) # flat ground
 elif pbName == 'stairs' or pbName == 'debris':
-    # afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])
-    afftool.loadObstacleModel ("package://hpp_environments/urdf/" + "multicontact/daeun/" + pbName + ".urdf", "planning", vf,reduceSizes=[0.015,0.,0.])
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.015,0.,0.])
 else:
-    # afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
-    afftool.loadObstacleModel ("package://hpp_environments/urdf/" + "multicontact/daeun/" + pbName + ".urdf", "planning", vf) # flat ground
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf)
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
 
 #load the viewer
 v = vf.createViewer(displayArrows = True)
@@ -321,18 +320,24 @@ if data != None:
     phase_num = data[0]
     candidate_num = data[1]
     mip_comp_gr = data[2]
-    fail = data[3]
+    sl1m_comp_gr = data[3]
+    fail1 = data[4]
+    fail2 = data[5]
+    failcase = data[6]
 else :
     phase_num = []
     candidate_num = []
     mip_comp_gr = []
-    fail = 0
+    sl1m_comp_gr = []
+    fail1 = 0
+    fail2 = 0
+    failcase = []
 
 
 
-from sl1m.fix_sparsity import solveMIP_cost, solveMIP
+from sl1m.fix_sparsity import solveMIP, solveL1
 from random import *
-
+its = 0
 while run < MAX_RUN :
     q_init = rbprmBuilder.getCurrentConfig ()
     ### path planning
@@ -358,15 +363,15 @@ while run < MAX_RUN :
         q_goal = q_init [::]
         q_goal [0:3] = p_goal
         q_goal[-6:-3] = [0,0,0]
-        #if pbName == 'playground':
-            #q_init[3:7]=[0,0,-0.7071,0.7071]
-            #q_goal[3:7]=[0,0,-0.7071,0.7071]
 
     ps.setInitialConfig (q_init)
     ps.addGoalConfig (q_goal)
 
     t = ps.solve ()
+
     print ("done planning, optimize path ...")
+
+
 
     for i in range(5):
         ps.optimizePath(ps.numberPaths() -1)
@@ -384,10 +389,6 @@ while run < MAX_RUN :
     ################################ MIP ################################
     ### generate contact candidates
     if GUIDE:
-        # if pbName == 'rubbles_1' or 'stairs_2':
-        #     R, surfaces = getSurfacesFromGuideContinuous(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
-        # else:
-        # R, surfaces = getSurfacesFromGuide(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
         if CONTINUOUS:
             R, surfaces = getSurfacesFromGuideContinuous(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
         else:
@@ -398,22 +399,69 @@ while run < MAX_RUN :
     ### generate contact planning problem
     pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
     ### solve
-    res_MI = solveMIP_cost(pb, surfaces,p_goal, draw_scene, PLOT, CPP)
+    res_MI = solveMIP(pb, surfaces, draw_scene, PLOT, CPP)
 
     print(res_MI)
 
     if not res_MI.success: # MIP FAIL
-        fail+=1
         continue
     else:
         mip_comp_gr += [res_MI.time]
 
-    ## MIP COST
-    pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
-    ### solve
-    res_MI = solveMIP(pb, surfaces, draw_scene, PLOT, CPP, True)
 
-    print(res_MI)
+    ################################ SL1M ################################
+    ### generate contact candidates
+    if GUIDE:
+        if CONTINUOUS:
+            R, surfaces = getSurfacesFromGuideContinuous(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
+        else:
+            R, surfaces = getSurfacesFromGuide(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
+    else:
+        R, surfaces = getSurfacesAll(ps,afftool,step_num)
+
+    ### generate contact planning problem
+    pb = gen_pb(init, s_p0, R, surfaces)
+    ### solve
+    # res_L1 = solveL1Reweighted(pb, surfaces, draw_scene, PLOT, CPP, SOLVER, OPT)
+    res_L1, it = solveL1(pb, surfaces, draw_scene, PLOT, CPP, SOLVER, OPT)
+    print(res_L1)
+
+    its += it
+
+    if not res_L1.success: # SL1M FAIL
+        fail1 += 1
+        failcase +=[res_L1.case]
+
+    # if res_L1.success:
+    #     pb_ = readFromFile("sl1m_data/pb")
+    #     surfaces_ = []
+    #     for phase_ in pb_["phaseData"]:
+    #         surfaces_ += [phase_["S"]]
+    #     res_MI_validation = solveMIP(pb_, surfaces_, draw_scene, PLOT, CPP)
+    #     print(res_MI_validation)
+
+    #     if not res_MI_validation.success: # SL1M UNFEASIBLE
+    #         fail2 += 1
+    #     else:
+    #         sl1m_comp_gr += [res_L1.time]
+    #         # if TEST:
+    #         #     with open("rubbles_stairs_res_cool",'wb') as f:
+    #         #         pickle.dump(res_L1.res, f)
+
+    # else:
+    #     from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
+    #     pb = res_L1.pb; allfeetpos = res_L1.res[2]
+    #     allfeetpos[0] = [init[1],init[0]]
+    #     del allfeetpos[1]
+    #     # pos = []
+    #     # for i in range(len(allfeetpos[0])):
+    #     #     pos += [[allfeetpos[0][i],allfeetpos[1][i]]]
+    #     del pb["phaseData"][0]; #del pos[0];
+    #     # allfeetpos = pos
+    #     from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
+    #     replace_surfaces_with_ineq_in_problem(pb)
+    #     cs = build_cs_from_sl1m_mip(pb,allfeetpos,rbprmBuilder,q_init)
+    #     cs.saveAsBinary("sl1m_data/bridge.cs")
 
     total_candidate = 0
     for surfs in surfaces:
@@ -425,9 +473,33 @@ while run < MAX_RUN :
     run += 1
 
 
-data = [phase_num, candidate_num, mip_comp_gr, fail]
+data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
 
 
-if SAVE:
-    with open(fileName,'wb') as f:
-        pickle.dump(data,f)
+# if SAVE:
+#     with open(fileName,'wb') as f:
+#         pickle.dump(data,f)
+
+its = it
+
+# from talos_rbprm.talos import Robot    as talosFull
+# fb2 = talosFull()
+# allfeetpos = res_L1.res[2]
+#
+# z_offset=0.1
+#
+# q_init = fb2.referenceConfig.copy()
+# # ~ q_init[:3] = p_start
+# q_end = q_init.copy()
+# # ~ q_end [0:3] = p_goal
+# # ~ q_end[-6:-3] = [0,0,0.]
+#
+# q_init[:7] = ps.configAtParam(pathId, 0.001)[:7]
+# q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
+# q_end[2] += z_offset
+# q_init[2] += z_offset
+# from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
+# cs = build_cs_from_sl1m_mip(res_L1.pb, allfeetpos, fb2, q_init, q_end,z_offset=z_offset / 2)
+# cs.saveAsBinary("talos_bridge.cs")
+#
+# v(q_init)
