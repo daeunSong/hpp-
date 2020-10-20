@@ -128,13 +128,21 @@ ps.setParameter("Kinodynamic/verticalAccelerationBound",10.)
 ps.setParameter("DynamicPlanner/sizeFootX",0.2)
 ps.setParameter("DynamicPlanner/sizeFootY",0.12)
 ps.setParameter("DynamicPlanner/friction",mu)
-if pbName in ['stairs_2', 'rubbles_stairs_1', 'playground']:
+if pbName in ['stairs_2', 'rubbles_stairs_1','stairs']:
     step_size = 1.0
     ps.setParameter("Kinodynamic/velocityBound",0.3)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
-elif pbName == 'debris':
+elif pbName in ['stairs']:
     step_size = 0.9
-    ps.setParameter("Kinodynamic/velocityBound",0.4)
+    ps.setParameter("Kinodynamic/velocityBound",0.3) 
+    ps.setParameter("Kinodynamic/accelerationBound",0.1)
+elif pbName == 'playground':
+    step_size = 0.6
+    ps.setParameter("Kinodynamic/velocityBound",0.3) 
+    ps.setParameter("Kinodynamic/accelerationBound",0.1)
+elif pbName == 'debris':
+    step_size = 0.7
+    ps.setParameter("Kinodynamic/velocityBound",0.4) 
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 if pbName == 'rubbles_stairs_1':
     ps.setParameter("Kinodynamic/velocityBound",0.25)
@@ -154,9 +162,12 @@ afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
 
 if pbName == 'ground':
     afftool.loadObstacleModel (packageName, "multicontact/ground", "planning", vf) # flat ground
-elif pbName == 'stairs' or pbName == 'debris':
-    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])
-    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.015,0.,0.])
+elif pbName == 'stairs':
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])    
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.15,0.,0.])
+elif pbName == 'debris':
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])    
+    afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.03,0.,0.])
 else:
     afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf)
     # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
@@ -359,6 +370,12 @@ while run < MAX_RUN :
         q_goal = q_init [::]
         p_goal = [1.8,0.8,0.98]
         q_goal[0:3] = p_goal
+    elif pbName == 'playground':
+        q_init [0:3] = [1.8,13.5,0.02]
+        q_init[-6:-3] = [0,0,0]
+        q_goal = q_init [::]
+        p_goal = [6.19,18,1.04]
+        q_goal[0:3] = p_goal
     else:
         q_init [0:3] = p_start
         q_goal = q_init [::]
@@ -476,30 +493,33 @@ if SAVE:
     with open(fileName,'wb') as f:
         pickle.dump(data,f)
 
-from talos_rbprm.talos import Robot    as talosFull
-fb2 = talosFull()
+
+from talos_rbprm.talos import Robot    as talosFull                                                                                              
+fb2 = talosFull()   
 allfeetpos = res_L1.res[2]
 
-z_offset=0.1
+z_offset=0.05
 
 q_init = fb2.referenceConfig.copy()
-# ~ q_init[:3] = p_start
+# ~ q_init[:3] = p_start 
 q_end = q_init.copy()
-# ~ q_end [0:3] = p_goal
+# ~ q_end [0:3] = p_goal 
 # ~ q_end[-6:-3] = [0,0,0.]
+from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
+
+pb = res_L1.pb
+del pb["phaseData"][0];
+replace_surfaces_with_ineq_in_problem(pb)
 
 q_init[:7] = ps.configAtParam(pathId, 0.001)[:7]
 q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
 q_end[2] += z_offset
 q_init[2] += z_offset
 
-from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
-pb = res_L1.pb
-del pb["phaseData"][0];
-replace_surfaces_with_ineq_in_problem(pb)
-
-from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
-cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=z_offset / 2)
-cs.saveAsBinary("talos_bridge.cs")
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
+cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.005) 
+# ~ cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.05) 
+cs.saveAsBinary("talos_debris.cs")   
 
 v(q_init)
