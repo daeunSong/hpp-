@@ -1,0 +1,40 @@
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 20 17:10:36 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 3956 rows, 512 columns and 15373 nonzeros
+Model fingerprint: 0x998d7c59
+Model has 3 quadratic objective terms
+Variable types: 284 continuous, 228 integer (228 binary)
+Coefficient statistics:
+  Matrix range     [8e-12, 1e+00]
+  Objective range  [2e+00, 4e+00]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Variable types: 284 continuous, 228 integer (228 binary)
+
+Root relaxation: objective 0.000000e+00, 1043 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   24          -    0.00000      -     -    0s
+     0     0    0.00000    0   24          -    0.00000      -     -    0s
+     0     0    0.00000    0   24          -    0.00000      -     -    0s
+     0     0    0.00000    0   24          -    0.00000      -     -    0s
+     0     0    0.00000    0   24          -    0.00000      -     -    0s
+     0     2    0.00000    0   24          -    0.00000      -     -    0s
+H 2690   447                       0.0000000    0.00000  0.00%  35.7    1s
+
+Cutting planes:
+  MIR: 3
+
+Explored 2742 nodes (98048 simplex iterations) in 1.37 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%

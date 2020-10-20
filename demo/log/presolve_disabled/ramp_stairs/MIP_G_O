@@ -1,0 +1,49 @@
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 20 17:35:58 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 9635 rows, 1466 columns and 36200 nonzeros
+Model fingerprint: 0x99f549fd
+Model has 3 quadratic objective terms
+Variable types: 791 continuous, 675 integer (675 binary)
+Coefficient statistics:
+  Matrix range     [5e-12, 1e+00]
+  Objective range  [2e+00, 5e+00]
+  QObjective range [2e+00, 2e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Variable types: 791 continuous, 675 integer (675 binary)
+
+Root relaxation: objective 3.600000e-01, 3242 iterations, 0.06 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.36000    0   54          -    0.36000      -     -    0s
+     0     0    0.36000    0   54          -    0.36000      -     -    0s
+     0     2    0.36000    0   54          -    0.36000      -     -    0s
+  1327   429    0.36000  129   42          -    0.36000      -  78.6    5s
+  2958   575 infeasible  138               -    0.36000      -  89.3   10s
+  4678   488 infeasible  184               -    0.36000      -  91.4   15s
+  6513   485 infeasible  146               -    0.36000      -  90.8   20s
+  8179   688 infeasible  133               -    0.36000      -  92.2   25s
+  9260   628 infeasible   76               -    0.36000      -  89.5   30s
+ 10690   671    0.50979  169   40          -    0.36000      -  85.9   35s
+ 12353   629 infeasible   87               -    0.36000      -  86.9   41s
+ 13800   771 infeasible  170               -    0.36000      -  88.6   45s
+ 15941   772 infeasible  101               -    0.36000      -  88.7   51s
+ 17444  1002 infeasible  148               -    0.36000      -  88.9   55s
+ 19519  1477    0.36000  261   18          -    0.36000      -  85.9   62s
+*19762   546             333       0.3600000    0.36000  0.00%  85.4   62s
+
+Cutting planes:
+  MIR: 2
+
+Explored 20542 nodes (1725093 simplex iterations) in 62.57 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0.36 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 3.600000429153e-01, best bound 3.600000429153e-01, gap 0.0000%
