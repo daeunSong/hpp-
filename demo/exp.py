@@ -4,7 +4,7 @@ from hpp.corbaserver.problem_solver import ProblemSolver
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
 import pickle
-Robot.urdfName += "_large"
+# Robot.urdfName += "_large"
 
 #################################################################
 #################################################################
@@ -13,6 +13,7 @@ packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
 I = 2
 TEST = True
+OPT = True
 GUIDE = True
 CONTINUOUS = False
 INTERSECT = True
@@ -22,7 +23,7 @@ pbNames = ['bridge_1','stairs','debris','rubbles_1','rubbles_stairs_1','ground',
 step_nums = [16,9,14,12,36,19,0]
 pbName = pbNames[I]
 
-folderName = "exp/1/"
+folderName = "./"
 fileName = folderName+pbName
 
 if not GUIDE:
@@ -134,15 +135,15 @@ if pbName in ['stairs_2', 'rubbles_stairs_1','stairs']:
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 elif pbName in ['stairs']:
     step_size = 0.9
-    ps.setParameter("Kinodynamic/velocityBound",0.3) 
+    ps.setParameter("Kinodynamic/velocityBound",0.3)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 elif pbName == 'playground':
     step_size = 0.6
-    ps.setParameter("Kinodynamic/velocityBound",0.3) 
+    ps.setParameter("Kinodynamic/velocityBound",0.3)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 elif pbName == 'debris':
     step_size = 0.7
-    ps.setParameter("Kinodynamic/velocityBound",0.4) 
+    ps.setParameter("Kinodynamic/velocityBound",0.4)
     ps.setParameter("Kinodynamic/accelerationBound",0.1)
 if pbName == 'rubbles_stairs_1':
     ps.setParameter("Kinodynamic/velocityBound",0.25)
@@ -163,19 +164,22 @@ afftool.setAffordanceConfig('Support', [0.5, 0.03, 0.00005])
 if pbName == 'ground':
     afftool.loadObstacleModel (packageName, "multicontact/ground", "planning", vf) # flat ground
 elif pbName == 'stairs':
-    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])    
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])
     afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.15,0.,0.])
 elif pbName == 'debris':
-    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])    
+    # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf,reduceSizes=[0.015,0.,0.])
     afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf,reduceSizes=[0.03,0.,0.])
 else:
     afftool.loadObstacleModel ("package://hpp_environments/urdf/multicontact/daeun/"+pbName+".urdf", "planning", vf)
     # ~ afftool.loadObstacleModel (packageName, "multicontact/daeun/"+pbName, "planning", vf)
 
 #load the viewer
-v = vf.createViewer(displayArrows = True)
-afftool.visualiseAffordances('Support', v, v.color.lightBrown)
-v.addLandmark(v.sceneName,1)
+v = vf.createViewer(displayArrows = False)
+# afftool.visualiseAffordances('Support', v, v.color.white)
+# v.addLandmark(v.sceneName,1)
+
+v.client.gui.setBackgroundColor1(v.sceneName,[1.,1.,1.,1.])
+v.client.gui.setBackgroundColor2(v.sceneName,[1.,1.,1.,1.])
 
 
 # # set init and goal position
@@ -314,36 +318,36 @@ def readFromFile (fileName):
 
 run = 0
 cnt = 0
-data = readFromFile(fileName)
+# data = readFromFile(fileName)
 
 if TEST:
     PLOT = True
     SAVE = False
-    OPT = True
+    # OPT = False
     MAX_RUN = 1
 else:
     PLOT = False
     SAVE = True
-    OPT = False
-    MAX_RUN = 100
-    v = None
+    # OPT = False
+    MAX_RUN = 10
+    # v = None
 
-if data != None:
-    phase_num = data[0]
-    candidate_num = data[1]
-    mip_comp_gr = data[2]
-    sl1m_comp_gr = data[3]
-    fail1 = data[4]
-    fail2 = data[5]
-    failcase = data[6]
-else :
-    phase_num = []
-    candidate_num = []
-    mip_comp_gr = []
-    sl1m_comp_gr = []
-    fail1 = 0
-    fail2 = 0
-    failcase = []
+# if data != None:
+#     phase_num = data[0]
+#     candidate_num = data[1]
+#     mip_comp_gr = data[2]
+#     sl1m_comp_gr = data[3]
+#     fail1 = data[4]
+#     fail2 = data[5]
+#     failcase = data[6]
+# else :
+phase_num = []
+candidate_num = []
+mip_comp_gr = []
+sl1m_comp_gr = []
+fail1 = 0
+fail2 = 0
+failcase = []
 
 
 
@@ -365,10 +369,10 @@ while run < MAX_RUN :
         p_goal = [1.87,0.8,1.58]
         q_goal[0:3] = p_goal
     elif pbName == 'debris':
-        q_init [0:3] = [-1.3,0.8,0.98]
+        q_init [0:3] = [-1.3,0.8,0.95]
         q_init[-6:-3] = [0,0,0]
         q_goal = q_init [::]
-        p_goal = [1.8,0.8,0.98]
+        p_goal = [1.8,0.8,0.95]
         q_goal[0:3] = p_goal
     elif pbName == 'playground':
         q_init [0:3] = [1.8,13.5,0.02]
@@ -394,6 +398,76 @@ while run < MAX_RUN :
     pathId = ps.numberPaths() -1
     print ("done optimizing.")
 
+    from hpp.gepetto import PathPlayer
+    pp = PathPlayer (v)
+    pp.dt=0.01
+    colors = [[1.,0.,0.,0.5],[0,0.5,0,0.5]]
+    # pp (pathId)
+    from time import sleep
+    from hpp.corbaserver.rbprm.tools.display_tools import displaySurfaceFromPoints  # tool from hpp-rbprm
+
+    v.client.gui.addLight("light", v.sceneName, 0.1, [0.3,0.3,0.3,1.0])
+    v.client.gui.applyConfiguration("light", [2.5,0.,3.,0.,0.,0.,0.])
+    v.client.gui.addToGroup("light", v.sceneName)
+    v.client.gui.refresh()
+
+    input("Press Enter to begin display ...")
+    pathLength = ps.pathLength(pathId)
+    i = 0;k = 0
+    for s in arange (0, pathLength, 0.01) :
+        q = ps.configAtParam(pathId, s)
+        if (k%10 == 0):
+            if (s == 0):
+                q_prev = q
+            else:
+                v.client.gui.addCurve("path_"+str(pathId)+str(s),[q_prev[:3],q[:3]],[0.9290, 0.6940, 0.1250, 1.0])
+                v.client.gui.setCurveLineWidth("path_"+str(pathId)+str(s), 2.0)
+                v.client.gui.addToGroup("path_"+str(pathId)+str(s), v.sceneName)
+                v.client.gui.refresh()
+            q_prev = q
+
+        v(q)
+        sleep(0.01)
+        if (k%70 == 0):
+            # phase sphere
+            name = "sphere"+str(i)
+            q_rot = q[3:7]
+            p = q[:7]
+            R = XYZQUATToSE3(p)
+            R_y = R; R_z = R
+            R = R.rotation
+            v.client.gui.addSphere(name,0.015,[0.9290, 0.6940, 0.1250, 1.0])
+            v.client.gui.applyConfiguration(name, p)
+
+            x_end = p[:3] + np.dot(R,array([1,0,0]))*0.1
+            v.client.gui.addCurve(name+"_x",[p[:3],x_end.tolist()],[1.,0.,0.,1.])
+            y_end = p[:3] + np.dot(R,array([0,1,0]))*0.1
+            v.client.gui.addCurve(name+"_y",[p[:3],y_end.tolist()],[0.,0.5,0.,1.])
+            z_end = p[:3] + np.dot(R,array([0,0,1]))*0.1
+            v.client.gui.addCurve(name+"_z",[p[:3],z_end.tolist()],[0.,0.,1.,1.])
+            v.client.gui.setCurveLineWidth(name+"_x", 3.0)
+            v.client.gui.setCurveLineWidth(name+"_y", 3.0)
+            v.client.gui.setCurveLineWidth(name+"_z", 3.0)
+
+            v.client.gui.addToGroup(name, v.sceneName)
+            v.client.gui.addToGroup(name+"_x", v.sceneName)
+            v.client.gui.addToGroup(name+"_y", v.sceneName)
+            v.client.gui.addToGroup(name+"_z", v.sceneName)
+            v.client.gui.refresh()
+
+            # # phase contacts
+            # contacts = getContactsIntersections (rbprmBuilder,i,q)
+            # for contact in contacts:
+            #     displaySurfaceFromPoints(v,contact,colors[i%2])
+            # sleep(0.5)
+            i += 1
+        k+=1
+
+    # # pp.displayVelocityPath(pathId)
+    # if v != None:
+    #     pp.displayPath(pathId,[0.9290, 0.6940, 0.1250, 1.0])
+    #     # v.client.gui.setVisibility("path_"+str(pathId)+"_root","ALWAYS_ON_TOP")
+    #     v.client.gui.setCurveLineWidth("path_"+str(pathId)+"_root",2.0)
 
     ### contact planning
     print ("############### run : ", run+1)
@@ -401,27 +475,27 @@ while run < MAX_RUN :
     s_p0 = ps.getInitialConfig()[0:3]; init = footPosFromCOM(s_p0)
     g_p0 = ps.getGoalConfigs()[0][0:3]; goal = footPosFromCOM(g_p0)
 
-    ################################ MIP ################################
-    ### generate contact candidates
-    if GUIDE:
-        if CONTINUOUS:
-            R, surfaces = getSurfacesFromGuideContinuous(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
-        else:
-            R, surfaces = getSurfacesFromGuide(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
-    else:
-        R, surfaces = getSurfacesAll(ps,afftool,step_num)
-
-    ### generate contact planning problem
-    pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
-    ### solve
-    res_MI = solveMIP(pb, surfaces, draw_scene, PLOT, CPP)
-
-    print(res_MI)
-
-    if not res_MI.success: # MIP FAIL
-        continue
-    else:
-        mip_comp_gr += [res_MI.time]
+    # ################################ MIP ################################
+    # ### generate contact candidates
+    # if GUIDE:
+    #     if CONTINUOUS:
+    #         R, surfaces = getSurfacesFromGuideContinuous(rbprmBuilder,ps,afftool,v,step_size,INTERSECT)
+    #     else:
+    #         R, surfaces = getSurfacesFromGuide(rbprmBuilder,ps,afftool,None,step_size,INTERSECT)
+    # else:
+    #     R, surfaces = getSurfacesAll(ps,afftool,step_num)
+    #
+    # ### generate contact planning problem
+    # pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
+    # ### solve
+    # res_MI = solveMIP(pb, surfaces, draw_scene, False, CPP, OPT)
+    #
+    # print(res_MI)
+    #
+    # if not res_MI.success: # MIP FAIL
+    #     continue
+    # else:
+    #     mip_comp_gr += [res_MI.time]
 
 
     ################################ SL1M ################################
@@ -438,12 +512,14 @@ while run < MAX_RUN :
     pb = gen_pb(init, s_p0, R, surfaces)
     ### solve
     # res_L1 = solveL1Reweighted(pb, surfaces, draw_scene, PLOT, CPP, SOLVER, OPT)
-    res_L1 = solveL1(pb, surfaces, draw_scene, PLOT, CPP, SOLVER, OPT)
+    res_L1 = solveL1(pb, surfaces, draw_scene, False, CPP, SOLVER, OPT)
     print(res_L1)
 
     if not res_L1.success: # SL1M FAIL
         fail1 += 1
         failcase +=[res_L1.case]
+    else:
+        sl1m_comp_gr += [res_L1.time]
 
     # if res_L1.success:
     #     pb_ = readFromFile("sl1m_data/pb")
@@ -476,34 +552,34 @@ while run < MAX_RUN :
     #     cs = build_cs_from_sl1m_mip(pb,allfeetpos,rbprmBuilder,q_init)
     #     cs.saveAsBinary("sl1m_data/bridge.cs")
 
-    total_candidate = 0
-    for surfs in surfaces:
-        total_candidate += len(surfs)
-
-    phase_num += [phase]
-    candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
+    # total_candidate = 0
+    # for surfs in surfaces:
+    #     total_candidate += len(surfs)
+    #
+    # phase_num += [phase]
+    # candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
 
     run += 1
 
+#
+# # data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
+# data = [surfaces,R]
+# fileName = "talos_"+pbName+".pb"
+# if SAVE:
+#     with open(fileName,'wb') as f:
+#         pickle.dump(data,f)
+#
 
-data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
-
-
-if SAVE:
-    with open(fileName,'wb') as f:
-        pickle.dump(data,f)
-
-
-from talos_rbprm.talos import Robot    as talosFull                                                                                              
-fb2 = talosFull()   
+from talos_rbprm.talos import Robot    as talosFull
+fb2 = talosFull()
 allfeetpos = res_L1.res[2]
 
 z_offset=0.05
 
 q_init = fb2.referenceConfig.copy()
-# ~ q_init[:3] = p_start 
+# ~ q_init[:3] = p_start
 q_end = q_init.copy()
-# ~ q_end [0:3] = p_goal 
+# ~ q_end [0:3] = p_goal
 # ~ q_end[-6:-3] = [0,0,0.]
 from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
 
@@ -516,10 +592,10 @@ q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
 q_end[2] += z_offset
 q_init[2] += z_offset
 
-from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
-from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
-cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.005) 
-# ~ cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.05) 
-cs.saveAsBinary("talos_debris.cs")   
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
+cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.005)
+# ~ cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset=0.05)
+cs.saveAsBinary("talos_bridge.cs")
 
 v(q_init)

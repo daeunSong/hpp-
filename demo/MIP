@@ -1,0 +1,1305 @@
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 20 22:19:12 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 9635 rows, 1466 columns and 36200 nonzeros
+Model fingerprint: 0x5f932d20
+Variable types: 791 continuous, 675 integer (675 binary)
+Coefficient statistics:
+  Matrix range     [5e-12, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Variable types: 791 continuous, 675 integer (675 binary)
+
+Root relaxation: objective 0.000000e+00, 978 iterations, 0.05 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0   50          -    0.00000      -     -    0s
+     0     0    0.00000    0   56          -    0.00000      -     -    0s
+     0     0    0.00000    0   56          -    0.00000      -     -    0s
+     0     0    0.00000    0   22          -    0.00000      -     -    0s
+     0     0    0.00000    0   18          -    0.00000      -     -    0s
+     0     0    0.00000    0   18          -    0.00000      -     -    0s
+     0     0    0.00000    0   18          -    0.00000      -     -    0s
+     0     2    0.00000    0   18          -    0.00000      -     -    1s
+  1902   724    0.00000  101   30          -    0.00000      -  33.9    5s
+* 2713   551             173       0.0000000    0.00000  0.00%  30.0    5s
+
+Cutting planes:
+  Gomory: 3
+  Cover: 2
+  MIR: 2
+  Inf proof: 2
+  RLT: 2
+
+Explored 2724 nodes (85881 simplex iterations) in 5.37 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 20 22:28:17 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 3956 rows, 512 columns and 15373 nonzeros
+Model fingerprint: 0xb6f7b38e
+Variable types: 284 continuous, 228 integer (228 binary)
+Coefficient statistics:
+  Matrix range     [1e-10, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Variable types: 284 continuous, 228 integer (228 binary)
+
+Root relaxation: objective 0.000000e+00, 376 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     2    0.00000    0    2          -    0.00000      -     -    0s
+*  141    94              16       0.0000000    0.00000  0.00%  26.7    0s
+
+Cutting planes:
+  Gomory: 1
+
+Explored 205 nodes (5530 simplex iterations) in 0.29 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 20 22:29:01 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 3956 rows, 512 columns and 15373 nonzeros
+Model fingerprint: 0xb6f7b38e
+Variable types: 284 continuous, 228 integer (228 binary)
+Coefficient statistics:
+  Matrix range     [1e-10, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Variable types: 284 continuous, 228 integer (228 binary)
+
+Root relaxation: objective 0.000000e+00, 376 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     2    0.00000    0    2          -    0.00000      -     -    0s
+*  141    94              16       0.0000000    0.00000  0.00%  26.7    0s
+
+Cutting planes:
+  Gomory: 1
+
+Explored 205 nodes (5530 simplex iterations) in 0.30 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 20 22:29:34 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 3956 rows, 512 columns and 15373 nonzeros
+Model fingerprint: 0xb6f7b38e
+Variable types: 284 continuous, 228 integer (228 binary)
+Coefficient statistics:
+  Matrix range     [1e-10, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Variable types: 284 continuous, 228 integer (228 binary)
+
+Root relaxation: objective 0.000000e+00, 376 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     2    0.00000    0    2          -    0.00000      -     -    0s
+*  141    94              16       0.0000000    0.00000  0.00%  26.7    0s
+
+Cutting planes:
+  Gomory: 1
+
+Explored 205 nodes (5530 simplex iterations) in 0.30 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 20 22:29:54 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 3956 rows, 512 columns and 15373 nonzeros
+Model fingerprint: 0xb6f7b38e
+Variable types: 284 continuous, 228 integer (228 binary)
+Coefficient statistics:
+  Matrix range     [1e-10, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-09, 2e+01]
+Variable types: 284 continuous, 228 integer (228 binary)
+
+Root relaxation: objective 0.000000e+00, 376 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     0    0.00000    0    2          -    0.00000      -     -    0s
+     0     2    0.00000    0    2          -    0.00000      -     -    0s
+*  141    94              16       0.0000000    0.00000  0.00%  26.7    0s
+
+Cutting planes:
+  Gomory: 1
+
+Explored 205 nodes (5530 simplex iterations) in 0.29 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:21 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:23 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:26 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:28 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:30 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:33 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:35 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:33:52 2020
+
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 2990 rows, 148 columns and 12295 nonzeros
+Model fingerprint: 0x7dbdba56
+Variable types: 106 continuous, 42 integer (42 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [9e-03, 2e+01]
+Variable types: 104 continuous, 44 integer (42 binary)
+
+Root relaxation: objective 0.000000e+00, 231 iterations, 0.01 seconds
+
+    Nodes    |    Current Node    |     Objective Bounds      |     Work
+ Expl Unexpl |  Obj  Depth IntInf | Incumbent    BestBd   Gap | It/Node Time
+
+H    0     0                       0.0000000    0.00000  0.00%     -    0s
+     0     0    0.00000    0   28    0.00000    0.00000  0.00%     -    0s
+
+Explored 0 nodes (231 simplex iterations) in 0.02 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 14:34:18 2020
+
+Warning for adding constraints: zero or small (< 1e-13) coefficients, ignored
+Gurobi Optimizer version 9.0.3 build v9.0.3rc0 (linux64)
+Optimize a model with 3143 rows, 80 columns and 12661 nonzeros
+Model fingerprint: 0x9bc0c776
+Variable types: 72 continuous, 8 integer (8 binary)
+Coefficient statistics:
+  Matrix range     [6e-04, 1e+00]
+  Objective range  [0e+00, 0e+00]
+  Bounds range     [1e+00, 1e+00]
+  RHS range        [2e-18, 2e+01]
+Variable types: 60 continuous, 20 integer (8 binary)
+Found heuristic solution: objective 0.0000000
+
+Explored 0 nodes (0 simplex iterations) in 0.04 seconds
+Thread count was 16 (of 16 available processors)
+
+Solution count 1: 0 
+
+Optimal solution found (tolerance 1.00e-04)
+Best objective 0.000000000000e+00, best bound 0.000000000000e+00, gap 0.0000%
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:51:50 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:51:51 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:51:53 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:51:55 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:51:57 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:51:59 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:00 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:02 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:04 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:08 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:09 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:11 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:13 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:35 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:37 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:42 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:44 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:46 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:52:49 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:25 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:27 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:30 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:32 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:34 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:36 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:39 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:41 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:43 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:53:46 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Wed Oct 21 20:54:00 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:45:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:45:42 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:45:44 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:45:46 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:45:49 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:45:51 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:45:53 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:47:17 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:48:15 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Oct 25 22:49:07 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:06:32 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:08:16 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:18:51 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:19:26 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:23:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:43:45 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:50:02 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:51:07 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:52:46 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:54:46 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:56:23 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 13:58:37 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:00:27 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:01:03 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:02:16 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:02:42 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:04:29 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:10:08 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:14:17 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:15:05 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:19:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:22:22 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:26:00 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:26:36 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:26:49 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:26:50 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:31:56 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:33:54 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:34:57 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:35:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 14:35:44 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:03:44 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:07:17 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:13:42 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:14:45 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:14:56 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:26:02 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:26:15 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:26:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:26:54 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:27:05 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:27:22 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:27:23 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:27:24 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:27:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:29:59 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:30:14 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:34:51 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:35:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:35:10 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:35:20 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:35:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:35:32 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:35:43 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:36:09 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:40:42 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:42:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:45:23 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:46:39 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:47:17 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:47:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:47:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:48:23 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:48:44 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:48:59 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:49:11 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:49:13 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:49:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:49:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:49:35 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:49:45 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:49:56 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:50:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:50:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:50:23 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:50:32 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:50:43 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:50:57 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:51:09 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:51:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:51:36 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:51:47 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:51:59 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:52:11 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:52:28 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:52:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:52:54 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:53:19 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:54:12 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:54:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:56:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:56:50 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:57:07 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:57:47 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:58:10 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 15:58:53 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 16:03:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Oct 26 16:12:09 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:35:24 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:39:46 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:41:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:42:04 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:42:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:54:52 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:55:36 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:57:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:58:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 12:58:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:26:11 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:28:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:31:39 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:38:14 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:38:32 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:42:22 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:42:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:42:56 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:47:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:48:22 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:49:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:49:41 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:50:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:50:30 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:50:42 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:50:58 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 13:51:23 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:18:07 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:20:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:20:37 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:23:02 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:23:39 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:25:19 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:26:29 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:28:49 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:31:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:31:52 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:32:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:32:51 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:33:34 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:34:12 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:35:26 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:38:22 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:39:03 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:39:22 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:40:21 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:44:49 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:45:43 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:47:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:47:58 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:49:41 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:50:23 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:50:45 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:51:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:58:33 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:59:00 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 14:59:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:19:04 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:19:52 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:21:02 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:21:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:35:22 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:35:48 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:36:52 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:37:55 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:44:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:46:09 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:47:35 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:51:03 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:51:59 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:52:51 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:54:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:54:58 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 15:56:56 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:01:10 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:02:34 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:03:36 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:04:36 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:08:20 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:14:02 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:17:08 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:18:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:18:51 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:19:27 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:22:32 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:24:25 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:26:03 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:27:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:28:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:29:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:30:05 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 16:31:07 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Tue Oct 27 22:30:18 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Mon Nov  2 02:01:37 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:02:58 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:03:45 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:05:20 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:06:10 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:06:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:07:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:08:47 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:13:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:14:47 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:15:55 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:17:04 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:22:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:23:10 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:24:19 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:25:29 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:26:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:27:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:27:32 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:28:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 13:28:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:08:35 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:43:47 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:44:16 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:44:55 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:45:27 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:45:59 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:46:30 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:47:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:47:35 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:48:09 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:48:49 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:49:25 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:49:56 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:50:31 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:51:04 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:51:35 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:52:06 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:52:38 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:53:16 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:53:50 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:54:25 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:54:59 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:55:34 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:56:05 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:56:41 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:57:15 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:57:45 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov  5 14:58:16 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sat Nov  7 19:58:40 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Sun Nov  8 18:51:01 2020
+
+
+Gurobi 9.0.3 (linux64) logging started Thu Nov 12 12:54:01 2020
+

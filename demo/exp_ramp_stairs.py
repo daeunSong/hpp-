@@ -1,4 +1,4 @@
-from talos_rbprm.talos_abstract import Robot 
+from talos_rbprm.talos_abstract import Robot
 from hpp.corbaserver.problem_solver import ProblemSolver
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
@@ -13,10 +13,11 @@ packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
 I = 2
 TEST = True
-GUIDE = True
+GUIDE = False
 CONTINUOUS = True
 INTERSECT = True
 COST=False
+OPT = True
 
 #pbNames = ['bridge_1','stairs','debris','rubbles_1','rubbles_stairs_1','ground', 'playground']
 #step_nums = [16,9,14,12,36,19,0]
@@ -226,13 +227,13 @@ data = readFromFile(fileName)
 if TEST:
     PLOT = False
     SAVE = False
-    OPT = True
+    # OPT = True
     MAX_RUN = 1
 else:
     PLOT = False
     SAVE = True
-    OPT = False
-    MAX_RUN = 100
+    # OPT = False
+    MAX_RUN = 10
     v = None
 
 if COST:
@@ -372,7 +373,8 @@ while run < MAX_RUN :
         ### generate contact planning problem
         pb = gen_pb(init, s_p0, R, surfaces); phase = len(pb["phaseData"])
         ### solve
-        res_MI = solveMIP_cost(pb, surfaces,p_goal, draw_scene, PLOT, CPP)
+        # res_MI = solveMIP_cost(pb, surfaces,p_goal, draw_scene, PLOT, CPP)
+        res_MI = solveMIP(pb, surfaces, draw_scene, PLOT, CPP, OPT)
 
         print(res_MI)
 
@@ -397,11 +399,11 @@ while run < MAX_RUN :
         ### generate contact candidates
         if GUIDE:
             if CONTINUOUS:
-                R, surfaces = getSurfacesFromGuideContinuous(rbprmBuilder,ps,afftool,v,step_size,INTERSECT,pathId)
+                R, surfaces = getSurfacesFromGuideContinuous(rbprmBuilder,ps,afftool,None,step_size,INTERSECT,pathId)
             else:
-                R, surfaces = getSurfacesFromGuide(rbprmBuilder,ps,afftool,v,step_size,INTERSECT,pathId)
+                R, surfaces = getSurfacesFromGuide(rbprmBuilder,ps,afftool,None,step_size,INTERSECT,pathId)
         else:
-            R, surfaces_ = getSurfacesFromGuide(rbprmBuilder,ps,afftool,v,step_size,INTERSECT,pathId)
+            R, surfaces_ = getSurfacesFromGuide(rbprmBuilder,ps,afftool,None,step_size,INTERSECT,pathId)
             R, surfaces = getSurfacesAll(ps,afftool,step_num)
             surfaces[-1]=surfaces_[-1]
 
@@ -442,52 +444,54 @@ while run < MAX_RUN :
         if not res_L1.success: # SL1M FAIL
             fail1 += 1
             failcase +=[res_L1.case]
+        else:
+            sl1m_comp_gr += [res_L1.time]
 
         ########################## validation with MIP ##########################
 
-        if res_L1.success:
-            # ~ pb_ = readFromFile("pb")
-            pb_ = gen_pb(init, s_p0, R, surfaces)
-            surfaces_ = []
-            for phase_ in pb_["phaseData"]:
-                surfaces_ += [phase_["S"]]
-            res_MI_validation = solveMIP(pb_, surfaces_, draw_scene, PLOT, CPP)
-            print(res_MI_validation)
+        # if res_L1.success:
+        #     # ~ pb_ = readFromFile("pb")
+        #     pb_ = gen_pb(init, s_p0, R, surfaces)
+        #     surfaces_ = []
+        #     for phase_ in pb_["phaseData"]:
+        #         surfaces_ += [phase_["S"]]
+        #     res_MI_validation = solveMIP(pb_, surfaces_, draw_scene, PLOT, CPP)
+        #     print(res_MI_validation)
+        #
+        #     if not res_MI_validation.success: # SL1M UNFEASIBLE
+        #         fail2 += 1
+        #     else:
+        #         sl1m_comp_gr += [res_L1.time]
+        #         if TEST:
+        #             with open(fileName+"_res",'wb') as f:
+        #                 pickle.dump(res_L1.res, f)
+        #
+        # phase_num += [phase]
+        # candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
 
-            if not res_MI_validation.success: # SL1M UNFEASIBLE
-                fail2 += 1
-            else:
-                sl1m_comp_gr += [res_L1.time] 
-                if TEST:
-                    with open(fileName+"_res",'wb') as f:
-                        pickle.dump(res_L1.res, f)
-        
-        phase_num += [phase]
-        candidate_num += [float(total_candidate-2)/float(len(surfaces)-2)]
-        
         run += 1
-    
-if COST:
-    data = [phase_num, candidate_num, mip_comp_gr, fail]
-    if SAVE:
-        with open(fileName,'wb') as f:
-            pickle.dump(data,f)
-else:
-    data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
-    if SAVE:
-        with open(fileName,'wb') as f:
-            pickle.dump(data,f) 
 
-from talos_rbprm.talos import Robot    as talosFull                                                                                              
-fb2 = talosFull()   
+# if COST:
+#     data = [phase_num, candidate_num, mip_comp_gr, fail]
+#     if SAVE:
+#         with open(fileName,'wb') as f:
+#             pickle.dump(data,f)
+# else:
+#     data = [phase_num, candidate_num, mip_comp_gr, sl1m_comp_gr, fail1, fail2, failcase, THRESHOLD]
+#     if SAVE:
+#         with open(fileName,'wb') as f:
+#             pickle.dump(data,f)
+#
+from talos_rbprm.talos import Robot    as talosFull
+fb2 = talosFull()
 allfeetpos = res_L1.res[2]
 
 z_offset=0.05
 
 q_init = fb2.referenceConfig.copy()
-# ~ q_init[:3] = p_start 
+# ~ q_init[:3] = p_start
 q_end = q_init.copy()
-# ~ q_end [0:3] = p_goal 
+# ~ q_end [0:3] = p_goal
 # ~ q_end[-6:-3] = [0,0,0.]
 from sl1m.constants_and_tools import replace_surfaces_with_ineq_in_problem
 
@@ -499,8 +503,8 @@ q_init[:7] = ps.configAtParam(pathId, 0.001)[:7]
 q_end [:7]= ps.configAtParam(pathId, ps.pathLength(pathId) - 0.001)[:7]
 q_end[2] += z_offset
 q_init[2] += z_offset
-from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip   
-cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset= 0.01) 
-cs.saveAsBinary("talos_ramp_stairs2.cs")   
+from sl1m.sl1m_to_mcapi import build_cs_from_sl1m_mip
+cs = build_cs_from_sl1m_mip(pb, allfeetpos, fb2, q_init, q_end,z_offset= 0.01)
+cs.saveAsBinary("talos_ramp_stairs2.cs")
 
 v(q_init)

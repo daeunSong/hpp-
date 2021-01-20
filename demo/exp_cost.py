@@ -1,7 +1,7 @@
 from talos_rbprm.talos_abstract import Robot
+from hpp.corbaserver.problem_solver import ProblemSolver
 from hpp.gepetto import Viewer
 from hpp.corbaserver import Client
-from hpp.corbaserver import ProblemSolver
 import pickle
 Robot.urdfName += "_large"
 
@@ -11,7 +11,7 @@ Robot.urdfName += "_large"
 packageName = 'hpp_environments'
 meshPackageName = 'hpp_environments'
 I = 0
-TEST = False
+TEST = True
 GUIDE = False
 CONTINUOUS = False
 INTERSECT = False
